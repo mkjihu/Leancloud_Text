@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.avos.avoscloud.AVOSCloud;
+import com.leancloud_text.Util.CustomUserProvider;
 
 import cn.leancloud.chatkit.LCChatKit;
 
@@ -35,7 +36,7 @@ public class MyLeanCloudApp extends Application {
 
 
         // 关于 CustomUserProvider 可以参看后面的文档
-        LCChatKit.getInstance().setProfileProvider(CustomUserProvider.getInstance());
+        LCChatKit.getInstance().setProfileProvider(new CustomUserProvider());
         LCChatKit.getInstance().init(getApplicationContext(), APP_ID, APP_KEY);
 
 
