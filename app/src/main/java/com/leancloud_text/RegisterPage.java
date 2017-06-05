@@ -1,5 +1,6 @@
 package com.leancloud_text;
 
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,14 +15,25 @@ import android.widget.Toast;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SignUpCallback;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
+import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.leancloud_text.obj.DialogBox;
 import com.leancloud_text.obj.ToastUnity;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.leancloud.chatkit.LCChatKit;
 import io.reactivex.functions.Consumer;
 
 public class RegisterPage extends AppCompatActivity {
@@ -31,7 +43,7 @@ public class RegisterPage extends AppCompatActivity {
     public EditText ed2;
     private DialogBox dialogBox;
 
-    private Button bt1,bt2;
+    private Button bt1,bt2,bt3;
 
 
     @Override
@@ -40,7 +52,7 @@ public class RegisterPage extends AppCompatActivity {
         setContentView(R.layout.activity_register_page);
         fid();
         vitin();
-
+        //EventBus.getDefault().register(this);//注册
 
 
 
@@ -70,16 +82,44 @@ public class RegisterPage extends AppCompatActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object arg0) throws Exception {
-
+                        /*
                         AVUser currentUser = AVUser.getCurrentUser();
                         if (currentUser!=null)
                             Log.i("成功",currentUser.getObjectId());
+                            Log.i("成功",currentUser.getSessionToken());
                             ToastUnity.ShowTost(RegisterPage.this,currentUser.getObjectId());
+                            sendMessageToJerryFromTom(currentUser.getObjectId());
+                        */
+
+                    }
+                });
+        RxView.clicks(bt3)
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object arg0) throws Exception {
+                        AVUser currentUser = AVUser.getCurrentUser();
+                        Log.i("1",currentUser.getObjectId());
+                        //Log.i("2",idid);
+                        AVIMConversation conv = AVIMClient.getInstance(currentUser.getObjectId()).getConversation("5935250e1b69e6005cafb876");
+                        AVIMTextMessage message = new AVIMTextMessage();
+                        message.setText("測試式式ASAF");
+                        conv.sendMessage(message, new AVIMConversationCallback() {
+                            @Override
+                            public void done(AVIMException e) {
+                                if (e == null) {
+                                    Log.i("測試a", "发送成功！");
+                                }
+                                else {
+                                    Log.i("失败",e.getLocalizedMessage()+"");
+                                }
+                            }
+                        });
                     }
                 });
     }
-
-
+    public String idid;
+    AVIMConversation conversationaaa;
 
     private void fid() {
         til1 = (TextInputLayout) findViewById(R.id.til1);
@@ -89,9 +129,22 @@ public class RegisterPage extends AppCompatActivity {
         dialogBox = new DialogBox(this);
         bt1 = (Button)findViewById(R.id.bt1);
         bt2 = (Button)findViewById(R.id.bt2);
+        bt3 = (Button)findViewById(R.id.bt3);
+
+    }
+    /**使用官方封裝過的方法*/
+    private void attemptRegister_x()
+    {
 
 
     }
+
+
+
+
+
+
+
 
     private void attemptRegister()
     {
@@ -136,16 +189,46 @@ public class RegisterPage extends AppCompatActivity {
     }
 
 
+    public void sendMessageToJerryFromTom(String clientId) {
+        // Tom 用自己的名字作为clientId，获取AVIMClient对象实例
+        AVIMClient tom = AVIMClient.getInstance(clientId);
+        // 与服务器连接
+        tom.open(new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient client, AVIMException e) {
+                if (e == null) {
 
-    //--驗證字串--
-    private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
-    private Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-    private Matcher matcher;
 
-    public boolean validateEmail(String email) {
-        matcher = pattern.matcher(email);
-        return matcher.matches();
+                    Log.i("客戶端ID",client.getClientId());
+
+                    // 创建与Jerry之间的对话
+                    client.createConversation(Arrays.asList("Jerry"), "Tom & Jerry", null,
+                            new AVIMConversationCreatedCallback() {
+
+                                @Override
+                                public void done(AVIMConversation conversation, AVIMException e) {
+                                    if (e == null) {
+
+                                        Log.i("對話ID",conversation.getConversationId());
+                                        idid = conversation.getConversationId();
+                                        conversationaaa = conversation;
+                                        AVIMTextMessage msg = new AVIMTextMessage();
+                                        msg.setText("耗子，起床！");
+                                        // 发送消息
+                                        conversation.sendMessage(msg, new AVIMConversationCallback() {
+
+                                            @Override
+                                            public void done(AVIMException e) {
+                                                if (e == null) {
+                                                    Log.i("Tom & Jerry", "发送成功！");
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                }
+            }
+        });
     }
-
-
 }

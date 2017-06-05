@@ -57,6 +57,9 @@ dependencies {
     compile('cn.leancloud.android:chatkit:1.0.+')
 
 
+
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
     //-SQL - Greendao
     compile 'org.greenrobot:greendao:3.2.0'
 
