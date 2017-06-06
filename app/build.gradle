@@ -1,4 +1,16 @@
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
@@ -28,6 +40,15 @@ android {
     }
 }
 
+greendao {
+    schemaVersion 2//數據庫版本號
+    //daoPackage 'de.greenrobot.BcComicdao'//設定DaoMaster、DaoSession 要放在哪個子資料夾  如果不寫救會自動產生在跟找到的class檔同目錄
+    targetGenDir 'src/main/java'//設置要自動尋找有Entit設定Tag的class檔案的資料夾目錄
+    //targetGenDirTest：設置生成單元測試目錄
+    //generateTests：設置自動生成單元測試用例
+}
+
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.3.0'
@@ -55,7 +76,6 @@ dependencies {
     compile 'cn.leancloud.android:avoscloud-search:v4.1.0@aar'
 
     compile('cn.leancloud.android:chatkit:1.0.+')
-
 
 
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'

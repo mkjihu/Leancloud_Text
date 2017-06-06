@@ -13,7 +13,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVInstallation;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.LogInCallback;
+import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SignUpCallback;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -44,7 +49,7 @@ public class RegisterPage extends AppCompatActivity {
     private DialogBox dialogBox;
 
     private Button bt1,bt2,bt3;
-
+    public static final String INSTALLATION = "installation";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +59,49 @@ public class RegisterPage extends AppCompatActivity {
         vitin();
         //EventBus.getDefault().register(this);//注册
 
-
+        /*
+        AVUser.getCurrentUser().put("age", 25);
+        AVUser.getCurrentUser().saveInBackground(new SaveCallback() {
+            @Override
+            public void done(AVException e) {
+                if(e == null){
+                    Log.i("saved","success!");
+                }
+            }
+        });
+        */
+        Log.i("QAAVInstallation",AVInstallation.getCurrentInstallation().getInstallationId());
+        AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
+            public void done(AVException e) {
+                if (e == null) {
+                    // 保存成功
+                    Log.i("保存成功",AVInstallation.getCurrentInstallation().getInstallationId());
+                } else {
+                    // 保存失败，输出错误信息
+                    Log.i("保存失败",e.getLocalizedMessage()+"");
+                }
+            }
+        });
+        if (AVUser.getCurrentUser() !=null)
+        {
+            AVInstallation installation = AVInstallation.getCurrentInstallation();
+            installation.saveInBackground();
+            if (installation != null) {
+                AVUser.getCurrentUser().put(INSTALLATION, installation);
+                AVUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(AVException e) {
+                        if(e!=null)
+                            Log.i("大失败A",e.getLocalizedMessage()+"");
+                        else
+                            Log.i("QQ","成啦");
+                    }
+                });
+            }
+            else{
+                Log.i("大錯誤","沒有installation");
+            }
+        }
 
     }
 
@@ -74,7 +121,7 @@ public class RegisterPage extends AppCompatActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object arg0) throws Exception {
-                        attemptRegister();
+                        attemptRegister(ed1.getText().toString(),ed2.getText().toString());
                     }
                 });
         RxView.clicks(bt2)
@@ -90,7 +137,7 @@ public class RegisterPage extends AppCompatActivity {
                             ToastUnity.ShowTost(RegisterPage.this,currentUser.getObjectId());
                             sendMessageToJerryFromTom(currentUser.getObjectId());
                         */
-
+                        loing(ed1.getText().toString(),ed2.getText().toString());
                     }
                 });
         RxView.clicks(bt3)
@@ -98,6 +145,7 @@ public class RegisterPage extends AppCompatActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object arg0) throws Exception {
+                        /*
                         AVUser currentUser = AVUser.getCurrentUser();
                         Log.i("1",currentUser.getObjectId());
                         //Log.i("2",idid);
@@ -115,11 +163,32 @@ public class RegisterPage extends AppCompatActivity {
                                 }
                             }
                         });
+                        *///
+                        final AVUser product = AVUser.getCurrentUser();
+                        AVFile file = new AVFile("url", "https://pic.pimg.tw/acatandcats/1386481325-3920179167.jpg",null);
+
+                        product.put("image", file);
+
+                        file.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(AVException e) {
+                                if (e == null) {
+                                    product.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(AVException e) {
+                                            if(e!=null) Log.i("大失败W",e.getLocalizedMessage()+"");
+                                        }
+                                    });
+                                } else {
+                                    Log.i("失败W",e.getLocalizedMessage()+"");
+                                }
+                            }
+                        });
                     }
                 });
     }
-    public String idid;
-    AVIMConversation conversationaaa;
+    //public String idid;
+    //AVIMConversation conversationaaa;
 
     private void fid() {
         til1 = (TextInputLayout) findViewById(R.id.til1);
@@ -132,41 +201,101 @@ public class RegisterPage extends AppCompatActivity {
         bt3 = (Button)findViewById(R.id.bt3);
 
     }
+
+    //--登入
+    private void loing(String username,String password)
+    {
+        AVUser.logInInBackground(username, password, new LogInCallback<AVUser>() {
+            @Override
+            public void done(AVUser avUser, AVException e) {
+                if (e == null) {
+                    attemptRegister_x();
+                } else {
+                    ToastUnity.ShowTost(RegisterPage.this, e.getMessage());
+                }
+            }
+        });
+    }
+
+
+
     /**使用官方封裝過的方法*/
     private void attemptRegister_x()
     {
+        //-註冊好之後關連推送ID-
+        if (AVUser.getCurrentUser() != null) {
+            AVInstallation installation = AVInstallation.getCurrentInstallation();
+            Log.i("AVInstallation成功",AVInstallation.getCurrentInstallation().getInstallationId()+"");
+            if (installation!=null)
+            {
+                AVUser.getCurrentUser().put("installation",AVInstallation.getCurrentInstallation());
+                AVUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(AVException e) {
+                        if(e!=null)
+                            Log.i("出錯",e.getLocalizedMessage()+"");
+                        else
+                            Log.i("QQ","1成啦");
+                    }
+                });
+            }
+            else
+            {
+                Log.i("AVInstallation失败","AVInstallation失败");
+            }
+
+        }
+
+
+        ///----连接服务器---使用登入者的ObjectId
+        AVIMClient tom = AVIMClient.getInstance(AVUser.getCurrentUser().getObjectId());
+        // 与服务器连接
+        tom.open(new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVIMException e) {
+                if(e!=null){
+                    Log.i("连接服务器失败",e.getLocalizedMessage()+"");
+                    DialogBox.getAlertDialog1(RegisterPage.this,"连接服务器失败",e.getLocalizedMessage());
+                } else {
+                    Intent intent = new Intent(RegisterPage.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
+
+
+
+
+
+
 
 
     }
 
 
-
-
-
-
-
-
-    private void attemptRegister()
+    /**註冊*/
+    private void attemptRegister(String username,String password)
     {
         til1.setError(null);
         til2.setError(null);
         if(!TextUtils.isEmpty(ed1.getText().toString())) {
-            if (!TextUtils.isEmpty(ed2.getText().toString())  && isPasswordValid(ed2.getText().toString()))
+            if (!TextUtils.isEmpty(username)  && isPasswordValid(password))
             {
                 dialogBox.ShoDi();
                 AVUser user = new AVUser();// 新建 AVUser 对象实例
-                user.setUsername(ed1.getText().toString());// 设置用户名
-                user.setPassword(ed2.getText().toString());// 设置密码
+                user.setUsername(username);// 设置用户名
+                user.setPassword(password);// 设置密码
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(AVException e) {
                         if (e == null) {
                             // 注册成功，把用户对象赋值给当前用户 AVUser.getCurrentUser()
                             Log.i("成功","成功");
-
+                            attemptRegister_x();
                         } else {
                             // 失败的原因可能有多种，常见的是用户名已经存在。
-                            Log.i("失败",e.getCode()+"");
+                            Log.i("失败",e.getMessage()+"");
                             if (e.getCode()==202){
                                 DialogBox.getAlertDialog1(RegisterPage.this,"錯誤","用戶名已被使用");
                             }
@@ -189,46 +318,46 @@ public class RegisterPage extends AppCompatActivity {
     }
 
 
-    public void sendMessageToJerryFromTom(String clientId) {
-        // Tom 用自己的名字作为clientId，获取AVIMClient对象实例
-        AVIMClient tom = AVIMClient.getInstance(clientId);
-        // 与服务器连接
-        tom.open(new AVIMClientCallback() {
-            @Override
-            public void done(AVIMClient client, AVIMException e) {
-                if (e == null) {
-
-
-                    Log.i("客戶端ID",client.getClientId());
-
-                    // 创建与Jerry之间的对话
-                    client.createConversation(Arrays.asList("Jerry"), "Tom & Jerry", null,
-                            new AVIMConversationCreatedCallback() {
-
-                                @Override
-                                public void done(AVIMConversation conversation, AVIMException e) {
-                                    if (e == null) {
-
-                                        Log.i("對話ID",conversation.getConversationId());
-                                        idid = conversation.getConversationId();
-                                        conversationaaa = conversation;
-                                        AVIMTextMessage msg = new AVIMTextMessage();
-                                        msg.setText("耗子，起床！");
-                                        // 发送消息
-                                        conversation.sendMessage(msg, new AVIMConversationCallback() {
-
-                                            @Override
-                                            public void done(AVIMException e) {
-                                                if (e == null) {
-                                                    Log.i("Tom & Jerry", "发送成功！");
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                }
-            }
-        });
-    }
+//    public void sendMessageToJerryFromTom(String clientId) {
+//        // Tom 用自己的名字作为clientId，获取AVIMClient对象实例
+//        AVIMClient tom = AVIMClient.getInstance(clientId);
+//        // 与服务器连接
+//        tom.open(new AVIMClientCallback() {
+//            @Override
+//            public void done(AVIMClient client, AVIMException e) {
+//                if (e == null) {
+//
+//
+//                    Log.i("客戶端ID",client.getClientId());
+//
+//                    // 创建与Jerry之间的对话
+//                    client.createConversation(Arrays.asList("Jerry"), "Tom & Jerry", null,
+//                            new AVIMConversationCreatedCallback() {
+//
+//                                @Override
+//                                public void done(AVIMConversation conversation, AVIMException e) {
+//                                    if (e == null) {
+//
+//                                        Log.i("對話ID",conversation.getConversationId());
+//                                        idid = conversation.getConversationId();
+//                                        conversationaaa = conversation;
+//                                        AVIMTextMessage msg = new AVIMTextMessage();
+//                                        msg.setText("耗子，起床！");
+//                                        // 发送消息
+//                                        conversation.sendMessage(msg, new AVIMConversationCallback() {
+//
+//                                            @Override
+//                                            public void done(AVIMException e) {
+//                                                if (e == null) {
+//                                                    Log.i("Tom & Jerry", "发送成功！");
+//                                                }
+//                                            }
+//                                        });
+//                                    }
+//                                }
+//                            });
+//                }
+//            }
+//        });
+//    }
 }
