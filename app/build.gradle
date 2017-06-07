@@ -11,6 +11,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+//apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 25
@@ -54,6 +55,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:design:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    ///-GCM
+    compile 'com.google.firebase:firebase-messaging:10.2.6'
+
+
     // LeanCloud 基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v4.1.0'
 
@@ -102,3 +108,4 @@ dependencies {
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
 
 }
+apply plugin: 'com.google.gms.google-services'
