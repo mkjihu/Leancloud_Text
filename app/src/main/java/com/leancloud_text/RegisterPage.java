@@ -21,24 +21,13 @@ import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SignUpCallback;
 import com.avos.avoscloud.im.v2.AVIMClient;
-import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.leancloud_text.Util.LeanchatUser;
 import com.leancloud_text.obj.DialogBox;
 import com.leancloud_text.obj.ToastUnity;
-
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import cn.leancloud.chatkit.LCChatKit;
 import io.reactivex.functions.Consumer;
 
 public class RegisterPage extends AppCompatActivity {
@@ -49,7 +38,7 @@ public class RegisterPage extends AppCompatActivity {
     private DialogBox dialogBox;
 
     private Button bt1,bt2,bt3;
-    public static final String INSTALLATION = "installation";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,24 +59,29 @@ public class RegisterPage extends AppCompatActivity {
             }
         });
         */
+        /*
         Log.i("QAAVInstallation",AVInstallation.getCurrentInstallation().getInstallationId());
         AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
             public void done(AVException e) {
                 if (e == null) {
                     // 保存成功
                     Log.i("保存成功",AVInstallation.getCurrentInstallation().getInstallationId());
+                    AVInstallation.getCurrentInstallation().saveInBackground();
+
                 } else {
                     // 保存失败，输出错误信息
                     Log.i("保存失败",e.getLocalizedMessage()+"");
                 }
             }
         });
+        */
+        /*
         if (AVUser.getCurrentUser() !=null)
         {
             AVInstallation installation = AVInstallation.getCurrentInstallation();
             installation.saveInBackground();
             if (installation != null) {
-                AVUser.getCurrentUser().put(INSTALLATION, installation);
+                AVUser.getCurrentUser().put(LeanchatUser.INSTALLATION, installation);
                 AVUser.getCurrentUser().saveInBackground(new SaveCallback() {
                     @Override
                     public void done(AVException e) {
@@ -102,7 +96,7 @@ public class RegisterPage extends AppCompatActivity {
                 Log.i("大錯誤","沒有installation");
             }
         }
-
+        */
     }
 
     private void vitin() {
@@ -283,6 +277,8 @@ public class RegisterPage extends AppCompatActivity {
             if (!TextUtils.isEmpty(username)  && isPasswordValid(password))
             {
                 dialogBox.ShoDi();
+
+
                 AVUser user = new AVUser();// 新建 AVUser 对象实例
                 user.setUsername(username);// 设置用户名
                 user.setPassword(password);// 设置密码

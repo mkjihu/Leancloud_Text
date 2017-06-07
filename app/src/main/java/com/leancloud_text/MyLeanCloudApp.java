@@ -4,15 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
-
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
-import com.avos.avoscloud.SaveCallback;
-
-import cn.leancloud.chatkit.LCChatKit;
+import com.leancloud_text.Util.LeanchatUser;
 
 /**
  * Created by kevinh on 2017/4/28.
@@ -40,11 +34,9 @@ public class MyLeanCloudApp extends Application {
         AVOSCloud.setDebugLogEnabled(true);
 
 
+        LeanchatUser.alwaysUseSubUserClass(LeanchatUser.class);//使用自定義
 
-
-        // 关于 CustomUserProvider 可以参看后面的文档
-
-
+        // 设置默认打开的 Activity
         PushService.setDefaultPushCallback(this, MainActivity.class);
     }
 
@@ -52,7 +44,6 @@ public class MyLeanCloudApp extends Application {
 
     /**
      * 判断网络是否可用
-     * @param context
      */
     public static Boolean isNetworkReachable() {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

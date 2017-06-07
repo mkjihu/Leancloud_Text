@@ -53,7 +53,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:design:25.3.0'
-
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     // LeanCloud 基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v4.1.0'
 
@@ -75,13 +75,13 @@ dependencies {
     // LeanCloud 应用内搜索包
     compile 'cn.leancloud.android:avoscloud-search:v4.1.0@aar'
 
-    compile('cn.leancloud.android:chatkit:1.0.+')
+    //compile('cn.leancloud.android:chatkit:1.0.+')
 
 
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
     //-SQL - Greendao
     compile 'org.greenrobot:greendao:3.2.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
 
     //--GSON
     compile 'com.google.code.gson:gson:2.8.0'
