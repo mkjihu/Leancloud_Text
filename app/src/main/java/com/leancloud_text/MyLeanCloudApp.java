@@ -1,17 +1,21 @@
 package com.leancloud_text;
 
-import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.multidex.MultiDexApplication;
+
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
+import com.leancloud_text.Network.HttpApiClient;
 import com.leancloud_text.Util.LeanchatUser;
 
 /**
  * Created by kevinh on 2017/4/28.
  */
-public class MyLeanCloudApp extends Application {
+
+//-配置方法数超过 64K 的应用 替换了 Application 类，请按如下方式对其进行更改以扩展 MultiDexApplication
+public class MyLeanCloudApp  extends MultiDexApplication {
     private static Context context;
 
     public static final String USERNAME = "username";
@@ -26,6 +30,9 @@ public class MyLeanCloudApp extends Application {
     public void onCreate() {
         super.onCreate();
         MyLeanCloudApp.context = getApplicationContext();
+        HttpApiClient.initialize();
+
+
 
         // 初始化参数依次为 this, AppId, AppKey
         AVOSCloud.initialize(this,APP_ID,APP_KEY);

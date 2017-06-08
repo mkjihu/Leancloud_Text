@@ -32,7 +32,7 @@ import com.leancloud_text.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private static final String TAG = "MyFirebaseMsgService";
+    private static final String TAG = "接收FirebaseMsgService";
 
     /**
      * Called when message is received.
@@ -58,7 +58,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            Log.i(TAG, "這是Message data payload: " + remoteMessage.getData());
 
             if (/* Check if data needs to be processed by long running job */ true) {
                 //對於長時間運行的任務（10秒以上），請使用Firebase Job Dispatcher。
@@ -69,10 +69,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
 
         }
+        Log.i(TAG, "From: " + remoteMessage.getFrom());
+        Log.i(TAG, "Message Body: " + remoteMessage.getNotification().getBody());
 
+        Log.i(TAG, "Notification: " + remoteMessage.getNotification().getTitle());
+        Log.i(TAG, "Notification: " + remoteMessage.getNotification().getIcon());
+
+
+
+        Log.i(TAG,"Data: "+remoteMessage.getData().get("Title"));
+        Log.i(TAG,"Data: "+remoteMessage.getData().get("Content"));
+
+        sendNotification(remoteMessage.getData().get("Title"),remoteMessage.getData().get("Content"));
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.i(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -98,7 +109,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * Handle time allotted to BroadcastReceivers.
      */
     private void handleNow() {
-        Log.d(TAG, "Short lived task is done.");
+        Log.i(TAG, "Short lived task is done.");
     }
 
     /**
@@ -120,6 +131,34 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendNotification(String title,String message) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                //.setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.i5))
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        // 建立震動效果，陣列中元素依序為停止、震動的時間，單位是毫秒
+        long[] vibrate_effect =
+                {0, 500};
+        // 設定震動效果
+        notificationBuilder.setVibrate(vibrate_effect);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
