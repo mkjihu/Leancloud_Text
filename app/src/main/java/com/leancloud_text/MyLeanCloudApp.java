@@ -6,7 +6,9 @@ import android.net.NetworkInfo;
 import android.support.multidex.MultiDexApplication;
 
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.PushService;
+import com.leancloud_text.Model.FcmKey2;
 import com.leancloud_text.Network.HttpApiClient;
 import com.leancloud_text.Util.LeanchatUser;
 
@@ -24,8 +26,8 @@ public class MyLeanCloudApp  extends MultiDexApplication {
     public static final String INSTALLATION = "installation";
 
 
-    private final String APP_ID = "gSrWhh8chYwzmyogpGI88iLf-gzGzoHsz";
-    private final String APP_KEY = "g9PdXFP1ctMeO0UiI5ph30VT";
+    public static final String APP_ID = "gSrWhh8chYwzmyogpGI88iLf-gzGzoHsz";
+    public static final String APP_KEY = "g9PdXFP1ctMeO0UiI5ph30VT";
     @Override
     public void onCreate() {
         super.onCreate();
@@ -34,6 +36,9 @@ public class MyLeanCloudApp  extends MultiDexApplication {
 
 
 
+        AVObject.registerSubclass(FcmKey2.class);//使用自定義
+        LeanchatUser.alwaysUseSubUserClass(LeanchatUser.class);//使用自定義
+
         // 初始化参数依次为 this, AppId, AppKey
         AVOSCloud.initialize(this,APP_ID,APP_KEY);
         // 放在 SDK 初始化语句 AVOSCloud.initialize() 后面，只需要调用一次即可
@@ -41,7 +46,7 @@ public class MyLeanCloudApp  extends MultiDexApplication {
         AVOSCloud.setDebugLogEnabled(true);
 
 
-        LeanchatUser.alwaysUseSubUserClass(LeanchatUser.class);//使用自定義
+
 
         // 设置默认打开的 Activity
         PushService.setDefaultPushCallback(this, MainActivity.class);

@@ -17,9 +17,16 @@
 package com.leancloud_text.FCM;
 
 import android.util.Log;
-
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.leancloud_text.Model.FcmKey;
+import com.leancloud_text.Network.HttpApiClient;
+import com.leancloud_text.Network.Shared;
+import com.leancloud_text.Util.LeanchatUser;
+import com.leancloud_text.obj.LogU;
+
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
@@ -38,22 +45,37 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.i(TAG, "Refreshed token: " + refreshedToken);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
+        Shared.SetFCMKey(getApplicationContext(),refreshedToken);//如果有系統更換Token 先紀錄
         sendRegistrationToServer(refreshedToken);
     }
     // [END refresh_token]
 
-    /**
-     * Persist token to third-party servers.
-     *
-     * Modify this method to associate the user's FCM InstanceID token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
+
+
+    /**如果有系統更換Token*/
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+
+        if (LeanchatUser.getCurrentUser() != null)
+        {
+            //FcmKey fcmKey = new FcmKey(LeanchatUser.getCurrentUserId(),token);
+            HttpApiClient.getInstance()
+                    .PostFcmKey(new FcmKey(LeanchatUser.getCurrentUserId(),token))
+                    .subscribeOn(Schedulers.io())//--跑在線程背後--只讀一次
+                    .unsubscribeOn(Schedulers.io())//允許取消訂閱
+                    .subscribeWith(new DisposableSubscriber<String>() {
+                        @Override
+                        public void onNext(String s) {
+                            //-完成
+                            LogU.i("完成",s);
+
+                        }
+                        @Override
+                        public void onError(Throwable e) {}
+                        @Override
+                        public void onComplete() {}
+                    });
+
+        }
+
     }
 }

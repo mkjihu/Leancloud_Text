@@ -72,7 +72,7 @@ public class HttpApiClient {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.leancloud.cn/1.1/")//.baseUrl("https://www.google.com.tw/")
+                .baseUrl(API_Url.BaseUrl)//.baseUrl("https://www.google.com.tw/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
