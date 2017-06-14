@@ -8,9 +8,15 @@ import android.support.multidex.MultiDexApplication;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.PushService;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMMessageManager;
+import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.leancloud_text.Model.FcmKey2;
 import com.leancloud_text.Network.HttpApiClient;
 import com.leancloud_text.Util.LeanchatUser;
+import com.leancloud_text.handler.ClientEventHandler;
+import com.leancloud_text.handler.CustomConversationEventHandler;
+import com.leancloud_text.handler.MessageHandler;
 
 /**
  * Created by kevinh on 2017/4/28.
@@ -46,6 +52,10 @@ public class MyLeanCloudApp  extends MultiDexApplication {
         AVOSCloud.setDebugLogEnabled(true);
 
 
+        /**註冊消息接受邏輯*/
+        AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class,new MessageHandler());
+        AVIMClient.setClientEventHandler(new ClientEventHandler());
+        AVIMMessageManager.setConversationEventHandler(new CustomConversationEventHandler());
 
 
         // 设置默认打开的 Activity

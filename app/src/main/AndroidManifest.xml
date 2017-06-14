@@ -47,16 +47,16 @@
             android:name=".RegisterPage"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
-
-        </activity>
-        <activity android:name=".FCMPage"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".FCMPage"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
+
         </activity>
         <!-- 实时通信模块、推送（均需要加入以下声明） START -->
         <!-- 实时通信模块、推送都要使用 PushService -->

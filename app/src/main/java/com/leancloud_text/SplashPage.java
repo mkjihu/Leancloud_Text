@@ -40,6 +40,8 @@ public class SplashPage extends AppCompatActivity {
                             SplashPage.this.finish();
                         }
                     });
+
+
                     SplashPage.this.finish();
                 }
             }, 2500);

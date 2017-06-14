@@ -111,35 +111,6 @@ public class FCMPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (LeanchatUser.getCurrentUser() != null) {
-                    fcmKey2 = new FcmKey2();
-                    fcmKey2.setObjectId(LeanchatUser.getCurrentUserId());
-                    fcmKey2.setFcm_tokey("aaaaa");
-                    fcmKey2.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(AVException e) {
-                            if (e==null)
-                            {
-                                LeanchatUser.getCurrentUser().put("installation2",fcmKey2);
-                                LeanchatUser.getCurrentUser().saveInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(AVException e) {
-                                        if(e!=null)
-                                            Log.i("出錯2",e.getLocalizedMessage()+"");
-                                        else
-                                            Log.i("QQ","1成啦");
-                                    }
-                                });
-                            }
-                            else
-                            {
-                                Log.i("出錯",e.getLocalizedMessage()+"");
-                            }
-                        }
-                    });
-
-                }
-
                 /*
                 if (LeanchatUser.getCurrentUser() != null) {
                     // 第一参数是 className,第二个参数是 objectId
