@@ -23,7 +23,7 @@ public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
     @Override
     public void onMessage(AVIMTypedMessage message, AVIMConversation conversation, AVIMClient client) {
         // 请按自己需求改写
-
+        LogU.i("誰?",conversation.getConversationId()+"_"+conversation.getName());
         switch(AVIMReservedMessageType.getAVIMReservedMessageType(message.getMessageType())) {
             case TextMessageType:
                 AVIMTextMessage textMsg = (AVIMTextMessage)message;

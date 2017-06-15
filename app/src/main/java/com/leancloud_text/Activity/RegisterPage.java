@@ -1,4 +1,4 @@
-package com.leancloud_text;
+package com.leancloud_text.Activity;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
@@ -7,15 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVInstallation;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SaveCallback;
@@ -24,7 +21,7 @@ import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.leancloud_text.Util.LeanchatUser;
+import com.leancloud_text.R;
 import com.leancloud_text.obj.DialogBox;
 import com.leancloud_text.obj.ToastUnity;
 import java.util.concurrent.TimeUnit;
@@ -205,6 +202,7 @@ public class RegisterPage extends AppCompatActivity {
                 if (e == null) {
                     attemptRegister_x();
                 } else {
+                    Log.i("登入出錯",e.getLocalizedMessage()+"");
                     ToastUnity.ShowTost(RegisterPage.this, e.getMessage());
                 }
             }

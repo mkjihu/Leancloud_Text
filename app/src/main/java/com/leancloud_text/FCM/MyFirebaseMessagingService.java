@@ -27,7 +27,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.leancloud_text.MainActivity;
+import com.leancloud_text.Activity.MainActivity;
 import com.leancloud_text.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {

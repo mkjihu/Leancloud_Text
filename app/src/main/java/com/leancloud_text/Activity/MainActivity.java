@@ -1,4 +1,4 @@
-package com.leancloud_text;
+package com.leancloud_text.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,9 +10,11 @@ import com.androidquery.AQuery;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.leancloud_text.R;
 import com.leancloud_text.Util.LeanchatUser;
 import com.leancloud_text.obj.LogU;
 
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                              *                 为 true 时，仅 members 为有效查询条件
                              * @param callback
                              */
-                    .createConversation(Arrays.asList("A"), "測試對話1", null, false, true, new AVIMConversationCreatedCallback() {
+                    .createConversation(Arrays.asList("5941162f128fe1006a100f8b"), "測試對話1", null, false, true, new AVIMConversationCreatedCallback() {
                         @Override
                         public void done(AVIMConversation avimConversation, AVIMException e) {
 
@@ -91,8 +93,39 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        aq.id(R.id.button5).clicked(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AVIMTextMessage msg = new AVIMTextMessage();
+                msg.setText(editText.getText().toString());
+                athis.sendMessage(msg, new AVIMConversationCallback() {
+                    @Override
+                    public void done(AVIMException e) {
+                        if (e == null) {
+                            LogU.i("測試對話1", "发送成功！");
+                        }
+                    }
+                });
+            }
+        });
 
-
+        aq.id(R.id.button6).clicked(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AVIMClient.getInstance(LeanchatUser.getCurrentUser().getObjectId()).close(new AVIMClientCallback() {
+                    @Override
+                    public void done(AVIMClient avimClient, AVIMException e) {
+                        if (e == null) {
+                            LogU.i("關閉通道", "成功！");
+                        }
+                        else
+                        {
+                            LogU.i("關閉通道", e.getMessage());
+                        }
+                    }
+                });
+            }
+        });
 
     }
 

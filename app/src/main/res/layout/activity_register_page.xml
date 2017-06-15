@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.leancloud_text.RegisterPage">
+    tools:context="com.leancloud_text.Activity.RegisterPage">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar2"
@@ -87,7 +87,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:text="發送測試" />
+                android:text="發送測試"
+                android:visibility="invisible" />
         </LinearLayout>
 
 

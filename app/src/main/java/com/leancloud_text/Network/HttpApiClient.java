@@ -6,6 +6,9 @@ import java.util.concurrent.TimeUnit;
 
 import android.os.Environment;
 import android.util.Log;
+
+import com.leancloud_text.MyLeanCloudApp;
+
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
@@ -54,12 +57,13 @@ public class HttpApiClient {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        //File cacheFile = new File(GivenHttp.CachePath);
+        //File cacheFile = new File(GivenHttp.CachePath);//設置緩存路徑
         //Cache cache = new Cache(cacheFile, 1024 * 1024 * 50); //50Mb
+        //Cache cache = new Cache(MyLeanCloudApp.getAppContext().getCacheDir(), 1024 * 1024 * 50); //50Mb
 
         client = new OkHttpClient().newBuilder()
                 //.cache(cache)
-                //.addInterceptor(logging)//--攔截器-输出网络请求和结果的 Log
+                .addInterceptor(logging)//--攔截器-输出网络请求和结果的 Log
                 .readTimeout(20 * 1000, TimeUnit.MILLISECONDS)
                 .writeTimeout(20 * 1000, TimeUnit.MILLISECONDS)
                 .connectTimeout(20 * 1000, TimeUnit.MILLISECONDS)

@@ -1,4 +1,4 @@
-package com.leancloud_text;
+package com.leancloud_text.Activity;
 
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -7,25 +7,19 @@ import android.util.Log;
 import android.view.View;
 
 import com.androidquery.AQuery;
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVUser;
-import com.avos.avoscloud.SaveCallback;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.leancloud_text.Model.FCMInfo;
-import com.leancloud_text.Model.FcmKey;
 import com.leancloud_text.Model.FcmKey2;
 import com.leancloud_text.Model.data;
 import com.leancloud_text.Model.notification;
 import com.leancloud_text.Network.API_Url;
 import com.leancloud_text.Network.HttpApiClient;
-import com.leancloud_text.Util.LeanchatUser;
+import com.leancloud_text.R;
 import com.leancloud_text.obj.LogU;
 import com.leancloud_text.obj.ToastUnity;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subscribers.DisposableSubscriber;
 import io.reactivex.subscribers.ResourceSubscriber;
 
 public class FCMPage extends AppCompatActivity {
@@ -73,7 +67,7 @@ public class FCMPage extends AppCompatActivity {
         api_url = HttpApiClient.getRetrofit().create(API_Url.class);
 
         fcmInfo = new FCMInfo();
-        fcmInfo.setTo(Token);
+        fcmInfo.setTo("eGlGuuhj_7Q:APA91bFWxkBZOc_A-99bU_3IEIVMbibwwITFbM6UGMpqjBG2JpjWNvYfT7k_fHSy6vUeMLhn8Fnnzqm1_X3pNJfvOlBdSV0onQDmLX0VL9aKc-2qzhWZ87h_JURzyIWLEhm3kXOBdQPn");
         data data = new data();
         data.setTitle("A這是 data Title");
         data.setContent("A這是 data Content");

@@ -23,6 +23,7 @@ public interface API_Url {
     //伺服器金鑰
     //AAAA7rOgZK4:APA91bFEBdwanf0nS_x6wiT7nxA2_QzDoP06gSfOw_I6wnemRtBBChdhN2YinnCidTUb_Ri0tkuAyrXKZZTvab9lMvWMVfIHR6mX1QnhTDM_nN20TFTmIEmO53_Ey1dtwQ1rcCMPtdJM
 
+    /**自己發自己推播*/
     @POST
     @Headers({
             "Content-Type: application/json",

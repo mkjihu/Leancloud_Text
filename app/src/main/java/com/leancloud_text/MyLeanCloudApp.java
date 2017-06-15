@@ -11,6 +11,7 @@ import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
+import com.leancloud_text.Activity.MainActivity;
 import com.leancloud_text.Model.FcmKey2;
 import com.leancloud_text.Network.HttpApiClient;
 import com.leancloud_text.Util.LeanchatUser;
@@ -25,7 +26,7 @@ import com.leancloud_text.handler.MessageHandler;
 //-配置方法数超过 64K 的应用 替换了 Application 类，请按如下方式对其进行更改以扩展 MultiDexApplication
 public class MyLeanCloudApp  extends MultiDexApplication {
     private static Context context;
-
+    private static MyLeanCloudApp instance;
     public static final String USERNAME = "username";
     public static final String AVATAR = "avatar";
     public static final String LOCATION = "location";
@@ -39,7 +40,7 @@ public class MyLeanCloudApp  extends MultiDexApplication {
         super.onCreate();
         MyLeanCloudApp.context = getApplicationContext();
         HttpApiClient.initialize();
-
+        instance = this;
 
 
         AVObject.registerSubclass(FcmKey2.class);//使用自定義
@@ -62,6 +63,13 @@ public class MyLeanCloudApp  extends MultiDexApplication {
         PushService.setDefaultPushCallback(this, MainActivity.class);
     }
 
+    public static Context getAppContext() {
+        return MyLeanCloudApp.context;
+    }
+
+    public static MyLeanCloudApp getInstance() {
+        return instance;
+    }
 
 
     /**
