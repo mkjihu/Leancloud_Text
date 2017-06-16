@@ -7,19 +7,24 @@ import android.util.Log;
 import android.view.View;
 
 import com.androidquery.AQuery;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.SaveCallback;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.leancloud_text.Model.FCMInfo;
+import com.leancloud_text.Model.FcmKey;
 import com.leancloud_text.Model.FcmKey2;
 import com.leancloud_text.Model.data;
 import com.leancloud_text.Model.notification;
 import com.leancloud_text.Network.API_Url;
 import com.leancloud_text.Network.HttpApiClient;
 import com.leancloud_text.R;
+import com.leancloud_text.Util.LeanchatUser;
 import com.leancloud_text.obj.LogU;
 import com.leancloud_text.obj.ToastUnity;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 import io.reactivex.subscribers.ResourceSubscriber;
 
 public class FCMPage extends AppCompatActivity {
@@ -101,10 +106,46 @@ public class FCMPage extends AppCompatActivity {
             }
         });
 
+
+        /**
+         * 判斷是否有帳號
+         * 取得FCM
+         * 關連到帳號上面
+         */
+
+
+
         aq.id(R.id.button4).clicked(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (LeanchatUser.getCurrentUser() != null) {
+                    api_url.GetFcmKey(LeanchatUser.getCurrentUserId())
+                            .subscribeOn(Schedulers.io())//--跑在線程背後--只讀一次
+                            .unsubscribeOn(Schedulers.io())//允許取消訂閱
+                            .subscribeWith(new DisposableSubscriber<FcmKey>() {
+                                @Override
+                                public void onNext(FcmKey s) {
+                                    //-完成
+                                    if( s.getObjectId()==null)
+                                    {
+                                        LogU.i("完成", "GG");
 
+                                    }
+                                    LogU.i("完成", s.getObjectId());
+
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    LogU.i("完成GG", e.getMessage()+"_");
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                }
+                            });
+
+                }
                 /*
                 if (LeanchatUser.getCurrentUser() != null) {
                     // 第一参数是 className,第二个参数是 objectId
@@ -142,6 +183,7 @@ public class FCMPage extends AppCompatActivity {
 
                                 @Override
                                 public void onError(Throwable e) {
+                                    LogU.i("完成GG", e.getMessage());
                                 }
 
                                 @Override

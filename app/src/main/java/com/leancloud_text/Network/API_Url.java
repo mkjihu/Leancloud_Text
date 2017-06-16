@@ -33,6 +33,7 @@ public interface API_Url {
 
 
 
+    /**創資料*/
     @POST("classes/FcmKey")
     @Headers({
             "Content-Type: application/json",
@@ -50,4 +51,11 @@ public interface API_Url {
     })
     Flowable<String> UpPostFcmKey(@Path("objectId")String objectId,@Body FcmKey fcmKey);
 
+    /**查詢*/
+    @GET("classes/FcmKey/{objectId}")
+    @Headers({
+            "X-LC-Id: "+ MyLeanCloudApp.APP_ID,
+            "X-LC-Key: "+MyLeanCloudApp.APP_KEY
+    })
+    Flowable<FcmKey> GetFcmKey(@Path("objectId")String objectId);
 }

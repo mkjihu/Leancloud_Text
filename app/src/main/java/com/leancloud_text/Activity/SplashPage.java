@@ -31,6 +31,7 @@ public class SplashPage extends BaseAppActivity {
         setContentView(R.layout.activity_splash_page);
         presenter = new SplashPresenter(this);
 
+        /*
         try {
             if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 //申请WRITE_EXTERNAL_STORAGE权限
@@ -47,7 +48,7 @@ public class SplashPage extends BaseAppActivity {
         } catch (Exception e) {
 
         }
-
+        */
 
     }
 
@@ -80,24 +81,7 @@ public class SplashPage extends BaseAppActivity {
     {
         if (LeanchatUser.getCurrentUser() != null) {
             LeanchatUser.getCurrentUser().updateUserInfo();
-            new Handler().postDelayed(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    ///----连接服务器---使用登入者的ObjectId
-                    AVIMClient tom = AVIMClient.getInstance(AVUser.getCurrentUser().getObjectId());
-                    // 与服务器连接
-                    tom.open(new AVIMClientCallback() {
-                        @Override
-                        public void done(AVIMClient avimClient, AVIMException e) {
-                            Intent intent = new Intent(SplashPage.this,MainActivity.class);
-                            startActivity(intent);
-                            SplashPage.this.finish();
-                        }
-                    });
-                }
-            }, 1000);
+            presenter.Strike(LeanchatUser.getCurrentUser().getObjectId());
         }
         else
         {
@@ -115,6 +99,27 @@ public class SplashPage extends BaseAppActivity {
     }
 
 
+    public void TOMain()
+    {
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                ///----连接服务器---使用登入者的ObjectId
+                AVIMClient tom = AVIMClient.getInstance(AVUser.getCurrentUser().getObjectId());
+                // 与服务器连接
+                tom.open(new AVIMClientCallback() {
+                    @Override
+                    public void done(AVIMClient avimClient, AVIMException e) {
+                        Intent intent = new Intent(SplashPage.this,MainActivity.class);
+                        startActivity(intent);
+                        SplashPage.this.finish();
+                    }
+                });
+            }
+        }, 1000);
+    }
 
     @Override
     protected void onDestroy() {

@@ -19,4 +19,8 @@ public class FcmKey2 extends AVObject{
         put("fcm_tokey",fcm_tokey);
     }
 
+    @Override
+    public void add(String key, Object value) {
+        super.add(key, value);
+    }
 }
