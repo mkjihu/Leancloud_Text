@@ -43,7 +43,7 @@ public class MyLeanCloudApp  extends MultiDexApplication {
         instance = this;
 
 
-        AVObject.registerSubclass(FcmKey2.class);//使用自定義
+        //AVObject.registerSubclass(FcmKey2.class);//使用自定義
         LeanchatUser.alwaysUseSubUserClass(LeanchatUser.class);//使用自定義
 
         // 初始化参数依次为 this, AppId, AppKey

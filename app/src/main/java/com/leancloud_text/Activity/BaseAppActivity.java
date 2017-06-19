@@ -21,6 +21,7 @@ public class BaseAppActivity extends AppCompatActivity implements maView {
     //public AlertDialog alertDialogas;
     private DialogBox dialogBox;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

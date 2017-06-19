@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:fitsSystemWindows="true"
-tools:context="com.leancloud_text.Activity.MainActivity">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.leancloud_text.Activity.MainActivity">
 
 <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"
@@ -14,17 +15,29 @@ tools:context="com.leancloud_text.Activity.MainActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/gts_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="?attr/actionBarSize"
+        app:layout_scrollFlags="scroll|enterAlways">
 
         <TextView
             android:id="@+id/gts_tv_title"
             style="@style/ToolbarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text=" " />
+            android:text="111"
+            android:textStyle="bold" />
 
     </android.support.v7.widget.Toolbar>
+
+
+    <com.lhh.apst.library.AdvancedPagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/pagertab_icon_style"
+        android:fillViewport="false"/>
+
+
+
 </android.support.design.widget.AppBarLayout>
 
 <LinearLayout
@@ -38,18 +51,6 @@ tools:context="com.leancloud_text.Activity.MainActivity">
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-    <am.widget.gradienttabstrip.GradientTabStrip
-        android:id="@+id/gts_gts_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/bg_gradienttabstrip_tab"
-        android:textColor="@drawable/color_gradienttabstrip_tab"
-        android:textSize="12sp"
-        app:gtsBackground="@drawable/bg_common_press"
-        app:gtsDrawablePadding="4dp"
-        app:gtsTagPaddingLeft="2dp"
-        app:gtsTagPaddingRight="2dp" />
 
 </LinearLayout>
 

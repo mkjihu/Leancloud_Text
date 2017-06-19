@@ -11,22 +11,22 @@ import com.leancloud_text.Fragment.ContactsFragment;
 import com.leancloud_text.Fragment.ConversFragment;
 import com.leancloud_text.Fragment.DiscoveryFragment;
 import com.leancloud_text.R;
+import com.lhh.apst.library.AdvancedPagerSlidingTabStrip;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import am.widget.basetabstrip.BaseTabStrip;
-import am.widget.gradienttabstrip.GradientTabStrip;
 
-public class MainActivity extends BaseAppActivity implements BaseTabStrip.OnItemClickListener {
+public class MainActivity extends BaseAppActivity {
 
     private ViewPager vpFragments;
     private TextView tvTitle;
-    private GradientTabStrip tabStrip;
+
     private GradientTabStripAdapter adapter;
+
     private String[] texts = {"對話","連繫人","搜尋","設置"};
 
-
+    public AdvancedPagerSlidingTabStrip tabs;
 
 
 
@@ -41,35 +41,19 @@ public class MainActivity extends BaseAppActivity implements BaseTabStrip.OnItem
         fragmentList.add(new ContactsFragment());//(new Fragment2_Record()());
         fragmentList.add(new DiscoveryFragment());//Fragment3_Search()
         fragmentList.add(new AccountFragment());//Fragment4_Settings()
-        adapter = new GradientTabStripAdapter(getSupportFragmentManager(),fragmentList,texts);
+        adapter = new GradientTabStripAdapter(getSupportFragmentManager(),this,fragmentList,texts);
         vpFragments.setAdapter(adapter);
-        tabStrip.setAdapter(adapter);
-        tabStrip.bindViewPager(vpFragments);
 
+        tabs.setViewPager(vpFragments);
+
+        tabs.showDot(0, "99+");
     }
 
     private void fid() {
-        tabStrip = (GradientTabStrip) findViewById(R.id.gts_gts_tabs);
         tvTitle = (TextView) findViewById(R.id.gts_tv_title);
         vpFragments = (ViewPager) findViewById(R.id.gts_vp_fragments);
-
-
-
-    }
-
-
-    @Override
-    public void onItemClick(int position) {
+        tabs = (AdvancedPagerSlidingTabStrip)findViewById(R.id.tabs);
 
     }
 
-    @Override
-    public void onSelectedClick(int position) {
-
-    }
-
-    @Override
-    public void onDoubleClick(int position) {
-
-    }
 }

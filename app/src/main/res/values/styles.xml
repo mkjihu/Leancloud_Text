@@ -22,4 +22,28 @@
         <item name="android:textSize">@dimen/textSize_Toolbar</item>
         <item name="android:singleLine">true</item>
     </style>
+
+    <style name="CustomTabPageIndicator.Text" parent="android:TextAppearance.Medium">
+        <item name="android:typeface">monospace</item>
+    </style>
+    <style name="pagertab_icon_style">
+        <!--
+        <item name="android:background">@drawable/tab_bg_normal</item>
+        <item name="apTabBackground">@drawable/tab_bg_normal</item>
+                <item name="android:textColor">@drawable/tab_color_select</item>
+        <item name="android:textAppearance">@style/CustomTabPageIndicator.Text</item>
+        -->
+        <item name="android:textSize">11sp</item>
+        <item name="android:textAppearance">@style/CustomTabPageIndicator.Text</item>
+        <item name="android:textColor">@drawable/tab_color_select</item>
+        <item name="apTabTextSelectColor">#FFFFFF</item>
+        <item name="apTabIndicatorHeight">3sp</item>
+        <item name="apTabIndicatorColor">#FFFFFF</item>
+       <!-- <item name="apTabUnderlineHeight">2sp</item> -->
+        <item name="apTabUnderlineColor">#1A000000</item>
+        <item name="apTabDividerColor">#00000000</item>
+        <item name="apTabShouldExpand">false</item>
+        <item name="apTabPaddingLeftRight">5dp</item>
+        <item name="apTabPaddingTopBottom">6dp</item>
+    </style>
 </resources>
