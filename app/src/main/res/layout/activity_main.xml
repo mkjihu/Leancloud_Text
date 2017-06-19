@@ -1,67 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true"
+tools:context="com.leancloud_text.Activity.MainActivity">
+
+<android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/gts_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/gts_tv_title"
+            style="@style/ToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=" " />
+
+    </android.support.v7.widget.Toolbar>
+</android.support.design.widget.AppBarLayout>
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.leancloud_text.Activity.MainActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="連線" />
-
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="發話" />
-
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="斷開連結" />
-
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/editText"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/gts_vp_fragments"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="對話文字"
-        android:inputType="textPersonName" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-    <LinearLayout
+    <am.widget.gradienttabstrip.GradientTabStrip
+        android:id="@+id/gts_gts_tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/button8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-    </LinearLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg_gradienttabstrip_tab"
+        android:textColor="@drawable/color_gradienttabstrip_tab"
+        android:textSize="12sp"
+        app:gtsBackground="@drawable/bg_common_press"
+        app:gtsDrawablePadding="4dp"
+        app:gtsTagPaddingLeft="2dp"
+        app:gtsTagPaddingRight="2dp" />
 
 </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

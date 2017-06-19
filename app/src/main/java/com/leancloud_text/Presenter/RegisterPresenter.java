@@ -1,7 +1,8 @@
 package com.leancloud_text.Presenter;
 
+
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.leancloud_text.Activity.SplashPage;
+import com.leancloud_text.Activity.RegisterPage;
 import com.leancloud_text.Model.FcmKey;
 import com.leancloud_text.Network.HttpApiClient;
 import com.leancloud_text.obj.LogU;
@@ -15,12 +16,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
-/**
- * Created by kevinh on 2017/6/15.
- */
-
-public class SplashPresenter extends BasePresenter<SplashPage> {
-    public SplashPresenter(SplashPage view) {
+public class RegisterPresenter extends BasePresenter<RegisterPage> {
+    public RegisterPresenter(RegisterPage view) {
         super(view);
     }
 
@@ -33,7 +30,6 @@ public class SplashPresenter extends BasePresenter<SplashPage> {
                     @Override
                     public void accept(Subscription arg0) throws Exception {
                         //显示加载-解析資料中
-                        getView().showload("連線伺服器..");
                     }
                 })
                 .subscribeOn(AndroidSchedulers.mainThread()) // 指定上面的doOnSubscribe跑主线程
@@ -66,12 +62,11 @@ public class SplashPresenter extends BasePresenter<SplashPage> {
                     }
                     @Override
                     public void onComplete() {
-                        getView().hideload();//關閉加载
-                        getView().TOMain();
+                        getView().Connected();
                     }
                 });
 
-            getDisposable().add(d);
+        getDisposable().add(d);
     }
 
     /**創*/

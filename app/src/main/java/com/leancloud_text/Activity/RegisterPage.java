@@ -3,10 +3,8 @@ package com.leancloud_text.Activity;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -21,26 +19,29 @@ import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.leancloud_text.Presenter.RegisterPresenter;
 import com.leancloud_text.R;
 import com.leancloud_text.obj.DialogBox;
+import com.leancloud_text.obj.LogU;
 import com.leancloud_text.obj.ToastUnity;
 import java.util.concurrent.TimeUnit;
 import io.reactivex.functions.Consumer;
 
-public class RegisterPage extends AppCompatActivity {
+public class RegisterPage extends BaseAppActivity {
 
     public TextInputLayout til1,til2;
     public TextInputEditText ed1;
     public EditText ed2;
-    private DialogBox dialogBox;
+
 
     private Button bt1,bt2,bt3;
-
+    private RegisterPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_page);
+        presenter= new RegisterPresenter(this);
         fid();
         vitin();
         //EventBus.getDefault().register(this);//注册
@@ -95,6 +96,13 @@ public class RegisterPage extends AppCompatActivity {
         }
         */
     }
+
+    @Override
+    protected void onDestroy() {
+        presenter.destroy();
+        super.onDestroy();
+    }
+
 
     private void vitin() {
         til1.setHint("帳號");
@@ -167,11 +175,11 @@ public class RegisterPage extends AppCompatActivity {
                                     product.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(AVException e) {
-                                            if(e!=null) Log.i("大失败W",e.getLocalizedMessage()+"");
+                                            if(e!=null) LogU.i("大失败W",e.getLocalizedMessage()+"");
                                         }
                                     });
                                 } else {
-                                    Log.i("失败W",e.getLocalizedMessage()+"");
+                                    LogU.i("失败W",e.getLocalizedMessage()+"");
                                 }
                             }
                         });
@@ -186,27 +194,10 @@ public class RegisterPage extends AppCompatActivity {
         til2 = (TextInputLayout)findViewById(R.id.til2);
         ed1 = (TextInputEditText)findViewById(R.id.ed1);
         ed2 = (EditText)findViewById(R.id.ed2);
-        dialogBox = new DialogBox(this);
         bt1 = (Button)findViewById(R.id.bt1);
         bt2 = (Button)findViewById(R.id.bt2);
         bt3 = (Button)findViewById(R.id.bt3);
 
-    }
-
-    //--登入
-    private void loing(String username,String password)
-    {
-        AVUser.logInInBackground(username, password, new LogInCallback<AVUser>() {
-            @Override
-            public void done(AVUser avUser, AVException e) {
-                if (e == null) {
-                    attemptRegister_x();
-                } else {
-                    Log.i("登入出錯",e.getLocalizedMessage()+"");
-                    ToastUnity.ShowTost(RegisterPage.this, e.getMessage());
-                }
-            }
-        });
     }
 
 
@@ -217,7 +208,7 @@ public class RegisterPage extends AppCompatActivity {
         //-註冊好之後關連推送ID-
         if (AVUser.getCurrentUser() != null) {
             AVInstallation installation = AVInstallation.getCurrentInstallation();
-            Log.i("AVInstallation成功",AVInstallation.getCurrentInstallation().getInstallationId()+"");
+            LogU.i("AVInstallation成功",AVInstallation.getCurrentInstallation().getInstallationId()+"");
             if (installation!=null)
             {
                 AVUser.getCurrentUser().put("installation",AVInstallation.getCurrentInstallation());
@@ -225,44 +216,20 @@ public class RegisterPage extends AppCompatActivity {
                     @Override
                     public void done(AVException e) {
                         if(e!=null)
-                            Log.i("出錯",e.getLocalizedMessage()+"");
+                            LogU.i("出錯",e.getLocalizedMessage()+"");
                         else
-                            Log.i("QQ","1成啦");
+                            LogU.i("QQ","1成啦");
                     }
                 });
             }
             else
             {
-                Log.i("AVInstallation失败","AVInstallation失败");
+                LogU.i("AVInstallation失败","AVInstallation失败");
             }
 
+            //--註冊FCMKEY
+            presenter.Strike(AVUser.getCurrentUser().getObjectId());
         }
-
-
-        ///----连接服务器---使用登入者的ObjectId
-        AVIMClient tom = AVIMClient.getInstance(AVUser.getCurrentUser().getObjectId());
-        // 与服务器连接
-        tom.open(new AVIMClientCallback() {
-            @Override
-            public void done(AVIMClient avimClient, AVIMException e) {
-                if(e!=null){
-                    Log.i("连接服务器失败",e.getLocalizedMessage()+"");
-                    DialogBox.getAlertDialog1(RegisterPage.this,"连接服务器失败",e.getLocalizedMessage());
-                } else {
-                    Intent intent = new Intent(RegisterPage.this,MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
-
-
-
-
-
-
-
-
     }
 
 
@@ -274,9 +241,7 @@ public class RegisterPage extends AppCompatActivity {
         if(!TextUtils.isEmpty(ed1.getText().toString())) {
             if (!TextUtils.isEmpty(username)  && isPasswordValid(password))
             {
-                dialogBox.ShoDi();
-
-
+                showload();
                 AVUser user = new AVUser();// 新建 AVUser 对象实例
                 user.setUsername(username);// 设置用户名
                 user.setPassword(password);// 设置密码
@@ -285,17 +250,17 @@ public class RegisterPage extends AppCompatActivity {
                     public void done(AVException e) {
                         if (e == null) {
                             // 注册成功，把用户对象赋值给当前用户 AVUser.getCurrentUser()
-                            Log.i("成功","成功");
+                            LogU.i("成功","成功");
                             attemptRegister_x();
                         } else {
+                            hideload();//
                             // 失败的原因可能有多种，常见的是用户名已经存在。
-                            Log.i("失败",e.getMessage()+"");
+                            LogU.i("失败",e.getMessage()+"");
                             if (e.getCode()==202){
                                 DialogBox.getAlertDialog1(RegisterPage.this,"錯誤","用戶名已被使用");
                             }
                             ToastUnity.ShowTost(RegisterPage.this, e.getMessage());
                         }
-                        dialogBox.DisDi();
                     }
                 });
             }
@@ -307,8 +272,51 @@ public class RegisterPage extends AppCompatActivity {
             til1.setError("未填帳號");
         }
     }
+
+
+
+    public void Connected()
+    {
+        ///----连接服务器---使用登入者的ObjectId
+        AVIMClient tom = AVIMClient.getInstance(AVUser.getCurrentUser().getObjectId());
+        // 与服务器连接
+        tom.open(new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVIMException e) {
+                hideload();
+                if(e!=null){
+                    LogU.i("连接服务器失败",e.getLocalizedMessage()+"");
+                    DialogBox.getAlertDialog1(RegisterPage.this,"连接服务器失败",e.getLocalizedMessage());
+                } else {
+                    Intent intent = new Intent(RegisterPage.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
+    }
+
+
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
+    }
+
+    //--登入
+    private void loing(String username,String password)
+    {
+        showload();
+        AVUser.logInInBackground(username, password, new LogInCallback<AVUser>() {
+            @Override
+            public void done(AVUser avUser, AVException e) {
+                if (e == null) {
+                    attemptRegister_x();
+                } else {
+                    hideload();//
+                    LogU.i("登入出錯",e.getLocalizedMessage()+"");
+                    ToastUnity.ShowTost(RegisterPage.this, e.getMessage());
+                }
+            }
+        });
     }
 
 

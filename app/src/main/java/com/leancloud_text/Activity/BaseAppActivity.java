@@ -10,25 +10,21 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.leancloud_text.Presenter.BasePresenter;
 import com.leancloud_text.View.maView;
+import com.leancloud_text.obj.DialogBox;
 
 /**
  * Created by kevinh on 2017/6/15.
  */
 
 public class BaseAppActivity extends AppCompatActivity implements maView {
-    private ProgressDialog logdialogs;
+    //private ProgressDialog logdialogs;
     //public AlertDialog alertDialogas;
-
+    private DialogBox dialogBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        logdialogs = new ProgressDialog(this);
-        logdialogs.setCancelable(false);
-        logdialogs.setInverseBackgroundForced(false);
-        logdialogs.setCanceledOnTouchOutside(false);
-        logdialogs.setMessage("加載中...");
+        dialogBox = new DialogBox(this);
 
 
     }
@@ -51,22 +47,15 @@ public class BaseAppActivity extends AppCompatActivity implements maView {
     }
     /**顯示加載*/
     public void showload() {
-        if(logdialogs!=null && !logdialogs.isShowing()) {
-            logdialogs.show();
-        }
+        dialogBox.ShoDi();
     }
     /**顯示加載*/
     public void showload(String text) {
-        if(logdialogs!=null && !logdialogs.isShowing()) {
-            logdialogs.setMessage(text);
-            logdialogs.show();
-        }
+        dialogBox.ShoDi(text);
     }
     /**此处关闭加載*/
     public void hideload() {
-        if(logdialogs!=null && logdialogs.isShowing()) {
-            logdialogs.dismiss();
-        }
+        dialogBox.DisDi();
     }
 
     /**關閉鍵盤*/

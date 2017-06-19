@@ -24,13 +24,24 @@ public class DialogBox {
     }
 
 
+    public void ShoDi(String text)
+    {
+        if(logdialogs!=null && !logdialogs.isShowing()) {
+            logdialogs.setMessage(text);
+            logdialogs.show();
+        }
+    }
     public void ShoDi()
     {
-        logdialogs.show();
+        if(logdialogs!=null && !logdialogs.isShowing()) {
+            logdialogs.show();
+        }
     }
     public void DisDi()
     {
-        logdialogs.dismiss();
+        if(logdialogs!=null && logdialogs.isShowing()) {
+            logdialogs.dismiss();
+        }
     }
 
 
