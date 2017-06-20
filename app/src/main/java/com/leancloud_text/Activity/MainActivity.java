@@ -47,6 +47,22 @@ public class MainActivity extends BaseAppActivity {
         tabs.setViewPager(vpFragments);
 
         tabs.showDot(0, "99+");
+        tvTitle.setText(texts[0]);
+        vpFragments.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+            @Override
+            public void onPageSelected(int position) {
+                tvTitle.setText(texts[position]);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void fid() {
