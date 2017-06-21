@@ -24,10 +24,9 @@ public abstract  class BaseFragment extends Fragment implements OnTouchListener{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		View view = inflater.inflate(getLayoutResource(), container, false); 
-        view.setOnTouchListener(this);  
-        
-        initData(savedInstanceState);
+        view.setOnTouchListener(this);
         findViewById(view);
+        initData(savedInstanceState);
         initVariables();
 		return view;
 	}

@@ -14,14 +14,20 @@ public class ConversFragment extends BaseFragment {
     public ConversFragment() {
     }
 
+
+
+
+
+
     @Override
     protected void findViewById(View view) {
+
 
     }
 
     @Override
     protected int getLayoutResource() {
-        return R.layout.fragment_a;
+        return R.layout.fragment_convers;
     }
 
     @Override

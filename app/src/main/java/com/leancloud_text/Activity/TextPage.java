@@ -46,6 +46,7 @@ public class TextPage extends AppCompatActivity {
         });
         */
 
+
         aq.id(R.id.button).clicked(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
