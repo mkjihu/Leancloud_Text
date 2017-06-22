@@ -1,22 +1,24 @@
 package com.leancloud_text;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.multidex.MultiDexApplication;
 
 import com.avos.avoscloud.AVOSCloud;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.leancloud_text.Activity.MainActivity;
-import com.leancloud_text.Model.FcmKey2;
 import com.leancloud_text.Network.HttpApiClient;
+import com.leancloud_text.SQL.DaoMaster;
+import com.leancloud_text.SQL.DaoSession;
 import com.leancloud_text.Util.LeanchatUser;
 import com.leancloud_text.handler.ClientEventHandler;
 import com.leancloud_text.handler.CustomConversationEventHandler;
+import com.leancloud_text.handler.CustomMessageHandler;
 import com.leancloud_text.handler.MessageHandler;
 
 /**
@@ -27,6 +29,13 @@ import com.leancloud_text.handler.MessageHandler;
 public class MyLeanCloudApp  extends MultiDexApplication {
     private static Context context;
     private static MyLeanCloudApp instance;
+
+    //---SQL
+    private DaoSession daoSession;
+    private DaoMaster.DevOpenHelper helper;
+
+
+
     public static final String USERNAME = "username";
     public static final String AVATAR = "avatar";
     public static final String LOCATION = "location";
@@ -35,6 +44,10 @@ public class MyLeanCloudApp  extends MultiDexApplication {
 
     public static final String APP_ID = "gSrWhh8chYwzmyogpGI88iLf-gzGzoHsz";
     public static final String APP_KEY = "g9PdXFP1ctMeO0UiI5ph30VT";
+
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -54,7 +67,13 @@ public class MyLeanCloudApp  extends MultiDexApplication {
 
 
         /**註冊消息接受邏輯*/
+        //注册默认的消息处理逻辑
+        //AVIMMessageManager.registerDefaultMessageHandler(new CustomMessageHandler());
+        //自訂消息處理
         AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class,new MessageHandler());
+        // 默认设置为离线消息仅推送数量
+        AVIMClient.setOfflineMessagePush(true);
+        //处理网络断开事件
         AVIMClient.setClientEventHandler(new ClientEventHandler());
         AVIMMessageManager.setConversationEventHandler(new CustomConversationEventHandler());
 
@@ -70,6 +89,28 @@ public class MyLeanCloudApp  extends MultiDexApplication {
     public static MyLeanCloudApp getInstance() {
         return instance;
     }
+
+    public DaoSession getDaoSession()
+    {
+        if (daoSession==null) {
+            initDaoSession();
+        }
+        return daoSession;
+    }
+
+    /**初始化DB*/
+    public void initDaoSession()
+    {
+        /**宣告資料庫*/
+        // 注意：默认的 DaoMaster.DevOpenHelper 会在数据库升级时，删除所有的表，意味着这将导致数据的丢失。
+        // 所以，在正式的项目中，你还应该做一层封装，来实现数据库的安全升级。
+        helper = new DaoMaster.DevOpenHelper(this, "MyLean-db", null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+
+    }
+
 
 
     /**

@@ -41,7 +41,7 @@ android {
 }
 
 greendao {
-    schemaVersion 2//數據庫版本號
+    schemaVersion 1//數據庫版本號
     //daoPackage 'de.greenrobot.BcComicdao'//設定DaoMaster、DaoSession 要放在哪個子資料夾  如果不寫救會自動產生在跟找到的class檔同目錄
     targetGenDir 'src/main/java'//設置要自動尋找有Entit設定Tag的class檔案的資料夾目錄
     //targetGenDirTest：設置生成單元測試目錄

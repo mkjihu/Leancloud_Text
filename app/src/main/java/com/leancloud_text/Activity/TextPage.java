@@ -66,7 +66,7 @@ public class TextPage extends AppCompatActivity {
                              *                 为 true 时，仅 members 为有效查询条件
                              * @param callback
                              */
-                            .createConversation(Arrays.asList("5941162f128fe1006a100f8b"), "測試對話1", null, false, true, new AVIMConversationCreatedCallback() {
+                            .createConversation(Arrays.asList("5941f988fe88c2006a533044"), "測試對話1", null, false, true, new AVIMConversationCreatedCallback() {
                                 @Override
                                 public void done(AVIMConversation avimConversation, AVIMException e) {
 
