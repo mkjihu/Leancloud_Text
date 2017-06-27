@@ -24,7 +24,7 @@ public class UnreadMessage {
     private String content;
     private java.util.Date upadte_time;
 
-    @Generated
+    @Generated(hash = 47831571)
     public UnreadMessage() {
     }
 
@@ -32,8 +32,9 @@ public class UnreadMessage {
         this.id = id;
     }
 
-    @Generated
-    public UnreadMessage(Long id, String conversation_id, String members, String name, String unreadCount, String content, java.util.Date upadte_time) {
+    @Generated(hash = 830015982)
+    public UnreadMessage(Long id, @NotNull String conversation_id, String members, @NotNull String name, String unreadCount, String content,
+            java.util.Date upadte_time) {
         this.id = id;
         this.conversation_id = conversation_id;
         this.members = members;

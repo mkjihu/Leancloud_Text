@@ -9,12 +9,15 @@ import com.androidquery.AQuery;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.AVIMMessageManager;
+import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.leancloud_text.R;
 import com.leancloud_text.Util.LeanchatUser;
+import com.leancloud_text.handler.MessageHandler;
 import com.leancloud_text.obj.LogU;
 
 import java.util.Arrays;
@@ -24,7 +27,7 @@ public class TextPage extends AppCompatActivity {
     public EditText editText;
     public AVIMConversation athis;
     public String ConversationID;//-該對話識別碼
-
+    public MessageHandler messageHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,9 @@ public class TextPage extends AppCompatActivity {
             }
         });
         */
+        messageHandler = new MessageHandler();
 
+        LogU.i("本基帳號",LeanchatUser.getCurrentUser().getObjectId()+"!"+LeanchatUser.getCurrentUser().getClassName());
 
         aq.id(R.id.button).clicked(new View.OnClickListener() {
             @Override
@@ -126,5 +131,40 @@ public class TextPage extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LogU.i("暫停畫面onStop","暫停畫面");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LogU.i("暫停畫面onPause","暫停畫面");
+        AVIMMessageManager.unregisterMessageHandler(AVIMTypedMessage.class,messageHandler);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogU.i("onResume","onResume畫面");
+        AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class,messageHandler);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
     }
 }

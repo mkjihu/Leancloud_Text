@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Looper;
 import android.support.multidex.MultiDexApplication;
 
 import com.avos.avoscloud.AVOSCloud;
@@ -68,9 +69,9 @@ public class MyLeanCloudApp  extends MultiDexApplication {
 
         /**註冊消息接受邏輯*/
         //注册默认的消息处理逻辑
-        //AVIMMessageManager.registerDefaultMessageHandler(new CustomMessageHandler());
+        AVIMMessageManager.registerDefaultMessageHandler(new CustomMessageHandler());
         //自訂消息處理
-        AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class,new MessageHandler());
+        //AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class,new MessageHandler());
         // 默认设置为离线消息仅推送数量
         AVIMClient.setOfflineMessagePush(true);
         //处理网络断开事件
@@ -112,7 +113,10 @@ public class MyLeanCloudApp  extends MultiDexApplication {
     }
 
 
-
+    /**判定是否在主線程*/
+    public static String isInMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper() ? "是主線程":"幹~不是主線程";
+    }
     /**
      * 判断网络是否可用
      */

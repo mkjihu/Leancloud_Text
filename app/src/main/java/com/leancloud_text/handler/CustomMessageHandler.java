@@ -5,6 +5,7 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.leancloud_text.MyLeanCloudApp;
 import com.leancloud_text.obj.LogU;
 
 /**
@@ -17,7 +18,7 @@ public class CustomMessageHandler extends AVIMMessageHandler {
     public void onMessage(AVIMMessage message, AVIMConversation conversation, AVIMClient client){
         if(message instanceof AVIMTextMessage){
 
-            LogU.i("默认的消息处理逻辑",((AVIMTextMessage)message).getText());
+            LogU.i("默认的消息处理逻辑",((AVIMTextMessage)message).getText()+ MyLeanCloudApp.isInMainThread());
         }
     }
 
