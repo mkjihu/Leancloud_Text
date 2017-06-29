@@ -46,7 +46,7 @@ public class MyLeanCloudApp  extends MultiDexApplication {
     public static final String APP_ID = "gSrWhh8chYwzmyogpGI88iLf-gzGzoHsz";
     public static final String APP_KEY = "g9PdXFP1ctMeO0UiI5ph30VT";
 
-
+    public static MessageHandler messageHandler;
 
 
     @Override
@@ -81,6 +81,10 @@ public class MyLeanCloudApp  extends MultiDexApplication {
 
         // 设置默认打开的 Activity
         PushService.setDefaultPushCallback(this, MainActivity.class);
+
+
+
+
     }
 
     public static Context getAppContext() {
@@ -111,6 +115,34 @@ public class MyLeanCloudApp  extends MultiDexApplication {
         daoSession = daoMaster.newSession();
 
     }
+
+
+    //-宣告實做自定義消息處理器
+
+    public static MessageHandler getMessageHandler()
+    {
+        if (messageHandler==null) {
+            messageHandler = new MessageHandler(getAppContext());
+        }
+        return messageHandler;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**判定是否在主線程*/

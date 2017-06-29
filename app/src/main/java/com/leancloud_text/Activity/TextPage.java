@@ -15,6 +15,7 @@ import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.leancloud_text.MyLeanCloudApp;
 import com.leancloud_text.R;
 import com.leancloud_text.Util.LeanchatUser;
 import com.leancloud_text.handler.MessageHandler;
@@ -27,7 +28,7 @@ public class TextPage extends AppCompatActivity {
     public EditText editText;
     public AVIMConversation athis;
     public String ConversationID;//-該對話識別碼
-    public MessageHandler messageHandler;
+    //public MessageHandler messageHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class TextPage extends AppCompatActivity {
             }
         });
         */
-        messageHandler = new MessageHandler();
+        //messageHandler = new MessageHandler();
 
         LogU.i("本基帳號",LeanchatUser.getCurrentUser().getObjectId()+"!"+LeanchatUser.getCurrentUser().getClassName());
 
@@ -138,29 +139,31 @@ public class TextPage extends AppCompatActivity {
         super.onStart();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        LogU.i("暫停畫面onStop","暫停畫面");
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        LogU.i("暫停畫面onPause","暫停畫面");
-        AVIMMessageManager.unregisterMessageHandler(AVIMTypedMessage.class,messageHandler);
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
         LogU.i("onResume","onResume畫面");
-        AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class,messageHandler);
+        AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class,MyLeanCloudApp.getMessageHandler());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LogU.i("暫停畫面onPause","暫停畫面");
+        AVIMMessageManager.unregisterMessageHandler(AVIMTypedMessage.class, MyLeanCloudApp.getMessageHandler());
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LogU.i("暫停畫面onStop","暫停畫面");
+        //AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class,MyLeanCloudApp.getMessageHandler());
     }
 
     @Override

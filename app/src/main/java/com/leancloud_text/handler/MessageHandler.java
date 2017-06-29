@@ -1,5 +1,7 @@
 package com.leancloud_text.handler;
 
+import android.content.Context;
+
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -23,11 +25,19 @@ import static com.avos.avoscloud.im.v2.AVIMReservedMessageType.*;
  */
 
 public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
+
+    private Context context;
+    public MessageHandler(Context context)
+    {
+        this.context = context;
+    }
+    public MessageHandler() {}
+
+    //接收到消息后的处理逻辑
     @Override
     public void onMessage(AVIMTypedMessage message, AVIMConversation conversation, AVIMClient client) {
         // 请按自己需求改写
-        LogU.i("誰?",conversation.getConversationId()+"_"+conversation.getName()+ MyLeanCloudApp.isInMainThread());
-
+        LogU.i("誰?"+ MyLeanCloudApp.isInMainThread(),conversation.getConversationId()+"_"+conversation.getName()+ MyLeanCloudApp.isInMainThread());
         if(AVUser.getCurrentUser().getObjectId() == null) {
             //-如果ID不存在表示已登出
             client.close((AVIMClientCallback) null);
