@@ -33,7 +33,7 @@ public class MainActivity extends BaseAppActivity {
 
     public AdvancedPagerSlidingTabStrip tabs;
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

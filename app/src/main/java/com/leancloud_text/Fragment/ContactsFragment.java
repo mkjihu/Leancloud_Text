@@ -14,7 +14,7 @@ import org.greenrobot.eventbus.EventBus;
 
 public class ContactsFragment  extends BaseFragment {
 
-
+    ///-聯絡人
     public ContactsFragment() {
     }
 
@@ -22,7 +22,7 @@ public class ContactsFragment  extends BaseFragment {
 
     @Override
     protected void initVariables() {
-        EventBus.getDefault().register(this);//注册
+        //EventBus.getDefault().register(this);//注册
 
 
     }
@@ -32,7 +32,7 @@ public class ContactsFragment  extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        EventBus.getDefault().unregister(this);//反注册
+        //EventBus.getDefault().unregister(this);//反注册
         super.onDestroyView();
     }
 

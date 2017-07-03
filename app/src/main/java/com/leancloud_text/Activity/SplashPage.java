@@ -49,7 +49,7 @@ public class SplashPage extends BaseAppActivity {
 
         }
         */
-
+        Strike();
     }
 
     //相機權限同意返回
@@ -85,6 +85,7 @@ public class SplashPage extends BaseAppActivity {
         }
         else
         {
+            LeanchatUser.getCurrentUser().updateUserInfo();
             new Handler().postDelayed(new Runnable()
             {
                 @Override

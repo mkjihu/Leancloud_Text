@@ -19,18 +19,6 @@
     <!-- baidumap 所需的权限 -end -->
 
 
-    <!-- 反馈组件（需要加入以下声明）START -->
-    <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" />
-
-    <!-- 收到通知時, 到狀態列要顯示的 icon -->
-    <meta-data
-        android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@mipmap/ic_launcher" />
-    <!-- 收到通知的背景色 -->
-    <meta-data
-        android:name="com.google.firebase.messaging.default_notification_color"
-        android:resource="@color/colorPrimary" />
-
     <!-- 基础模块 END -->
     <application
         android:name=".MyLeanCloudApp"
@@ -61,13 +49,15 @@
         </activity>
 
         <activity android:name=".Activity.TextPage">
+F
+        </activity>
+        <activity android:name=".Activity.SplashPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
 
 
@@ -86,7 +76,7 @@
         <!-- 反馈组件（需要加入以下声明）START -->
         <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" />
         <!-- 反馈组件 END -->
-        <activity android:name=".Activity.SplashPage"></activity>
+
 
         <!-- [START firebase_service] -->
         <service android:name=".FCM.MyFirebaseMessagingService">
@@ -111,6 +101,14 @@
             </intent-filter>
         </service>
         -->
+        <!-- 收到通知時, 到狀態列要顯示的 icon -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        <!-- 收到通知的背景色 -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
 
     </application>
 

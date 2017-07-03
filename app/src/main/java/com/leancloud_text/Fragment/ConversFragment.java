@@ -1,6 +1,8 @@
 package com.leancloud_text.Fragment;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.leancloud_text.R;
@@ -11,6 +13,12 @@ import com.leancloud_text.R;
 
 public class ConversFragment extends BaseFragment {
 
+
+    private RecyclerView recycler_view;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+
+    //-對話
     public ConversFragment() {
     }
 
@@ -21,8 +29,9 @@ public class ConversFragment extends BaseFragment {
 
     @Override
     protected void findViewById(View view) {
+        recycler_view =(RecyclerView)view.findViewById(R.id.mSwipeRefreshLayout);
 
-
+        mSwipeRefreshLayout =(SwipeRefreshLayout)view.findViewById(R.id.mSwipeRefreshLayout);
     }
 
     @Override
