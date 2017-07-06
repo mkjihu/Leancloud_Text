@@ -76,8 +76,8 @@ public class MyLeanCloudApp  extends MultiDexApplication {
         AVIMClient.setOfflineMessagePush(true);
         //处理网络断开事件
         AVIMClient.setClientEventHandler(new ClientEventHandler());
+        // 和 Conversation 相关的事件的 handler
         AVIMMessageManager.setConversationEventHandler(new CustomConversationEventHandler());
-
 
         // 设置默认打开的 Activity
         PushService.setDefaultPushCallback(this, MainActivity.class);

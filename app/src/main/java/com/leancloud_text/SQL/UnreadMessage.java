@@ -23,6 +23,7 @@ public class UnreadMessage {
     private String unreadCount;
     private String content;
     private java.util.Date upadte_time;
+    private Boolean isRead;
 
     @Generated(hash = 47831571)
     public UnreadMessage() {
@@ -32,9 +33,9 @@ public class UnreadMessage {
         this.id = id;
     }
 
-    @Generated(hash = 830015982)
-    public UnreadMessage(Long id, @NotNull String conversation_id, String members, @NotNull String name, String unreadCount, String content,
-            java.util.Date upadte_time) {
+    @Generated(hash = 1040036546)
+    public UnreadMessage(Long id, @NotNull String conversation_id, String members, @NotNull String name, String unreadCount, String content, java.util.Date upadte_time,
+            Boolean isRead) {
         this.id = id;
         this.conversation_id = conversation_id;
         this.members = members;
@@ -42,6 +43,7 @@ public class UnreadMessage {
         this.unreadCount = unreadCount;
         this.content = content;
         this.upadte_time = upadte_time;
+        this.isRead = isRead;
     }
 
     public Long getId() {
@@ -102,6 +104,14 @@ public class UnreadMessage {
 
     public void setUpadte_time(java.util.Date upadte_time) {
         this.upadte_time = upadte_time;
+    }
+
+    public Boolean getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(Boolean isRead) {
+        this.isRead = isRead;
     }
 
 }

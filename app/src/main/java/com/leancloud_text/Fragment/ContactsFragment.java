@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.leancloud_text.R;
+import com.leancloud_text.View.maView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -12,7 +13,7 @@ import org.greenrobot.eventbus.EventBus;
  * Created by kevinh on 2017/6/19.
  */
 
-public class ContactsFragment  extends BaseFragment {
+public class ContactsFragment  extends BaseFragment implements maView {
 
     ///-聯絡人
     public ContactsFragment() {

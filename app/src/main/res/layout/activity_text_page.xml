@@ -30,6 +30,13 @@ tools:context="com.leancloud_text.Activity.TextPage">
         android:layout_weight="1"
         android:text="斷開連結" />
 
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="清除未讀" />
+
 </LinearLayout>
 
 <EditText
@@ -44,12 +51,6 @@ tools:context="com.leancloud_text.Activity.TextPage">
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
-
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button" />
 
     <Button
         android:id="@+id/button8"

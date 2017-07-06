@@ -29,6 +29,7 @@ public class UnreadMessageDao extends AbstractDao<UnreadMessage, Long> {
         public final static Property UnreadCount = new Property(4, String.class, "unreadCount", false, "UNREAD_COUNT");
         public final static Property Content = new Property(5, String.class, "content", false, "CONTENT");
         public final static Property Upadte_time = new Property(6, java.util.Date.class, "upadte_time", false, "UPADTE_TIME");
+        public final static Property IsRead = new Property(7, Boolean.class, "isRead", false, "IS_READ");
     }
 
 
@@ -50,7 +51,8 @@ public class UnreadMessageDao extends AbstractDao<UnreadMessage, Long> {
                 "\"NAME\" TEXT NOT NULL ," + // 3: name
                 "\"UNREAD_COUNT\" TEXT," + // 4: unreadCount
                 "\"CONTENT\" TEXT," + // 5: content
-                "\"UPADTE_TIME\" INTEGER);"); // 6: upadte_time
+                "\"UPADTE_TIME\" INTEGER," + // 6: upadte_time
+                "\"IS_READ\" INTEGER);"); // 7: isRead
     }
 
     /** Drops the underlying database table. */
@@ -89,6 +91,11 @@ public class UnreadMessageDao extends AbstractDao<UnreadMessage, Long> {
         if (upadte_time != null) {
             stmt.bindLong(7, upadte_time.getTime());
         }
+ 
+        Boolean isRead = entity.getIsRead();
+        if (isRead != null) {
+            stmt.bindLong(8, isRead ? 1L: 0L);
+        }
     }
 
     @Override
@@ -121,6 +128,11 @@ public class UnreadMessageDao extends AbstractDao<UnreadMessage, Long> {
         if (upadte_time != null) {
             stmt.bindLong(7, upadte_time.getTime());
         }
+ 
+        Boolean isRead = entity.getIsRead();
+        if (isRead != null) {
+            stmt.bindLong(8, isRead ? 1L: 0L);
+        }
     }
 
     @Override
@@ -137,7 +149,8 @@ public class UnreadMessageDao extends AbstractDao<UnreadMessage, Long> {
             cursor.getString(offset + 3), // name
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // unreadCount
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // content
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)) // upadte_time
+            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)), // upadte_time
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0 // isRead
         );
         return entity;
     }
@@ -151,6 +164,7 @@ public class UnreadMessageDao extends AbstractDao<UnreadMessage, Long> {
         entity.setUnreadCount(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setContent(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setUpadte_time(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setIsRead(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
      }
     
     @Override

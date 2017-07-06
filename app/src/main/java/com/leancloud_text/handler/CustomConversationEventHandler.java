@@ -6,6 +6,7 @@ import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationEventHandler;
+import com.leancloud_text.obj.LogU;
 
 import java.util.List;
 
@@ -25,10 +26,16 @@ public class CustomConversationEventHandler extends AVIMConversationEventHandler
                                List<String> members, String invitedBy) {
         // 手机屏幕上会显示一小段文字：Tom 加入到 551260efe4b01608686c3e0f ；操作者为：Tom
 
-        Toast.makeText(AVOSCloud.applicationContext,members + "加入到" + conversation.getConversationId() + "；操作者为： "+ invitedBy, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(AVOSCloud.applicationContext,members + "加入到" + conversation.getConversationId() + "；操作者为： "+ invitedBy, Toast.LENGTH_SHORT).show();
+        LogU.i("有人聯絡上了", conversation.getConversationId()+"_加入到_ 未讀："+ conversation.getUnreadMessagesCount());
 
 
+    }
 
+    @Override
+    public void onUnreadMessagesCountUpdated(AVIMClient client, AVIMConversation conversation) {
+        super.onUnreadMessagesCountUpdated(client, conversation);
+        LogU.i("未讀數",""+conversation.getUnreadMessagesCount());
     }
 
     @Override

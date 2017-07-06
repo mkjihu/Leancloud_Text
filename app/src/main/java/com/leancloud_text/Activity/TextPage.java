@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.androidquery.AQuery;
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
@@ -50,6 +51,18 @@ public class TextPage extends AppCompatActivity {
         });
         */
         //messageHandler = new MessageHandler();
+        AVIMClient tom = AVIMClient.getInstance(AVUser.getCurrentUser().getObjectId());
+        tom.open(new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVIMException e) {
+
+                //透過該方式取得該對話的未讀數
+                LogU.i("測試對話1的未讀數", avimClient.getConversation("5941f9b1a46814d9c7a343e3").getUnreadMessagesCount()+"");
+                athis = avimClient.getConversation("5941f9b1a46814d9c7a343e3");
+            }
+        });
+
+
 
         LogU.i("本基帳號",LeanchatUser.getCurrentUser().getObjectId()+"!"+LeanchatUser.getCurrentUser().getClassName());
 
@@ -88,6 +101,7 @@ public class TextPage extends AppCompatActivity {
                                             }
                                         }
                                     });
+                                    LogU.i("未讀",""+avimConversation.getUnreadMessagesCount());
 
                                 }
                             });
@@ -111,6 +125,7 @@ public class TextPage extends AppCompatActivity {
                         }
                     }
                 });
+                LogU.i("未讀2",""+athis.getUnreadMessagesCount());
             }
         });
 
@@ -131,7 +146,12 @@ public class TextPage extends AppCompatActivity {
                 });
             }
         });
-
+        aq.id(R.id.button9).clicked(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                athis.read();
+            }
+        });
     }
 
     @Override

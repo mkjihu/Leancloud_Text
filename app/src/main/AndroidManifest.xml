@@ -49,14 +49,15 @@
         </activity>
 
         <activity android:name=".Activity.TextPage">
-F
-        </activity>
-        <activity android:name=".Activity.SplashPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".Activity.SplashPage">
+
         </activity>
 
 
@@ -74,7 +75,7 @@ F
         </receiver>
         <!-- 实时通信模块、推送 END -->
         <!-- 反馈组件（需要加入以下声明）START -->
-        <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" />
+        <!-- <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" /> -->
         <!-- 反馈组件 END -->
 
 
