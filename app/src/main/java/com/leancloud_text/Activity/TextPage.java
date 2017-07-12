@@ -56,8 +56,13 @@ public class TextPage extends AppCompatActivity {
             @Override
             public void done(AVIMClient avimClient, AVIMException e) {
 
+                if (e !=null)
+                {
+                    LogU.i("連線問題", e.getMessage());
+                }
                 //透過該方式取得該對話的未讀數
-                LogU.i("測試對話1的未讀數", avimClient.getConversation("5941f9b1a46814d9c7a343e3").getUnreadMessagesCount()+"");
+                //-----------------------呼叫過一次getUnreadMessagesCount 且清除在後台運行的APP就會判定消除未讀
+                //LogU.i("測試對話1的未讀數", avimClient.getConversation("5941f9b1a46814d9c7a343e3").getUnreadMessagesCount()+"_");
                 athis = avimClient.getConversation("5941f9b1a46814d9c7a343e3");
             }
         });
@@ -101,7 +106,7 @@ public class TextPage extends AppCompatActivity {
                                             }
                                         }
                                     });
-                                    LogU.i("未讀",""+avimConversation.getUnreadMessagesCount());
+                                    //LogU.i("未讀",""+avimConversation.getUnreadMessagesCount());
 
                                 }
                             });
@@ -112,6 +117,19 @@ public class TextPage extends AppCompatActivity {
 
             }
         });
+
+        /**
+         1.發話-關閉APP 重新開APP  未讀顯示正常
+
+         2.關閉APP無運行狀態 -- 發話 -開起APP 未讀顯示正常
+
+         呼叫過一次getUnreadMessagesCount 且清除在後台運行的APP就會判定消除未讀
+
+         3.清除在後台運行的APP狀態(沒有登出close) -- 發話 -開起APP --未讀顯示正常
+
+         4.先登出close -清除在後台運行的APP狀態- 發話 --開起APP --會等於沒有未讀
+         */
+
         aq.id(R.id.button5).clicked(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +144,7 @@ public class TextPage extends AppCompatActivity {
                     }
                 });
                 LogU.i("未讀2",""+athis.getUnreadMessagesCount());
+
             }
         });
 
@@ -150,6 +169,12 @@ public class TextPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 athis.read();
+            }
+        });
+        aq.id(R.id.button8).clicked(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogU.i("檢查的未讀數", athis.getUnreadMessagesCount()+"_");
             }
         });
     }
