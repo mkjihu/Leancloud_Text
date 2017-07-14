@@ -18,6 +18,8 @@ import com.avos.avoscloud.im.v2.messages.AVIMVideoMessage;
 import com.leancloud_text.MyLeanCloudApp;
 import com.leancloud_text.obj.LogU;
 
+import java.util.Date;
+
 import static com.avos.avoscloud.im.v2.AVIMReservedMessageType.*;
 
 /**
@@ -38,6 +40,20 @@ public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
     public void onMessage(AVIMTypedMessage message, AVIMConversation conversation, AVIMClient client) {
         // 请按自己需求改写
         LogU.i("誰?"+ MyLeanCloudApp.isInMainThread(),conversation.getConversationId()+"_"+conversation.getName()+ MyLeanCloudApp.isInMainThread());
+
+
+        LogU.i("A對話ID",conversation.getConversationId());
+        for (String string : conversation.getMembers()) {
+            LogU.i("A成员列表",string);
+        }
+        LogU.i("A發話對象ID",message.getFrom());
+        LogU.i("A聊天室名字",conversation.getName());
+        LogU.i("A未讀數",conversation.getUnreadMessagesCount()+"");
+        LogU.i("A內容",((AVIMTextMessage) message).getText());
+        LogU.i("A內容類型",((AVIMTextMessage) message).getMessageType()+"");
+        LogU.i("A更新時間",new Date().toString()+"___"+conversation.getUpdatedAt());
+
+
         if(AVUser.getCurrentUser().getObjectId() == null) {
             //-如果ID不存在表示已登出
             client.close((AVIMClientCallback) null);
@@ -73,6 +89,7 @@ public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
 
     public void CacVie(AVIMTypedMessage message)
     {
+
 
         switch(AVIMReservedMessageType.getAVIMReservedMessageType(message.getMessageType())) {
             case TextMessageType:
