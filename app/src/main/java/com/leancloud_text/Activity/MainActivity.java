@@ -46,7 +46,7 @@ public class MainActivity extends BaseAppActivity {
         fragmentList.add(new AccountFragment());//Fragment4_Settings()
         adapter = new GradientTabStripAdapter(getSupportFragmentManager(),this,fragmentList,texts);
         vpFragments.setAdapter(adapter);
-
+        vpFragments.setOffscreenPageLimit(3);
         tabs.setViewPager(vpFragments);
 
         tabs.showDot(0, "99+");

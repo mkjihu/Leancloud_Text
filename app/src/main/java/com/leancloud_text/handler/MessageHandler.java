@@ -15,10 +15,24 @@ import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMLocationMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMVideoMessage;
+import com.google.gson.Gson;
+import com.leancloud_text.Model.User;
 import com.leancloud_text.MyLeanCloudApp;
+import com.leancloud_text.Network.HttpApiClient;
+import com.leancloud_text.SQL.Passers;
+import com.leancloud_text.SQL.PassersDao;
 import com.leancloud_text.obj.LogU;
 
+import org.reactivestreams.Publisher;
+
 import java.util.Date;
+
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 import static com.avos.avoscloud.im.v2.AVIMReservedMessageType.*;
 
@@ -52,6 +66,16 @@ public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
         LogU.i("A內容",((AVIMTextMessage) message).getText());
         LogU.i("A內容類型",((AVIMTextMessage) message).getMessageType()+"");
         LogU.i("A更新時間",new Date().toString()+"___"+conversation.getUpdatedAt());
+
+
+
+        //
+
+
+        //Uac(message.getFrom());
+
+        //取得對話後,先存入DB
+        //以對話ID為PK
 
 
         if(AVUser.getCurrentUser().getObjectId() == null) {
@@ -122,6 +146,80 @@ public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
                 LogU.i("收到位置消息。msgId=",""  + locMsg.getMessageId() + ", latitude=" + locMsg.getLocation().getLatitude() + ", longitude=" + locMsg.getLocation().getLongitude());
                 break;
         }
+    }
+
+
+
+
+    //---額外控制
+    public void Uac(String UserId)
+    {
+
+        Flowable.just(UserId)
+                .subscribeOn(Schedulers.io())//--跑在線程背後--只讀一次
+                .flatMap(new Function<String,  Flowable<Passers>>() {
+                    @Override
+                    public Flowable<Passers> apply(@NonNull String s) throws Exception {
+                        PassersDao passersDao = MyLeanCloudApp.getInstance().getDaoSession().getPassersDao();
+                        Passers passers = passersDao.queryBuilder().where(PassersDao.Properties.UserObjectId.eq(s)).unique();
+                        if (passers ==null)
+                        {
+                            return NiGetUser(s);
+                        }
+                        //-如果有資料就直接傳
+                        return  Flowable.just(passers);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())//--結果在主線程中顯示
+                .unsubscribeOn(Schedulers.io())//允許取消訂閱
+                .subscribeWith(new DisposableSubscriber<Passers>() {
+                    @Override
+                    public void onNext(Passers passers) {
+                        LogU.i("完成", "完成");
+                        //--取得User資料
+
+
+
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        LogU.i("完成GG", e.getMessage());
+                    }
+                    @Override
+                    public void onComplete() {}
+                });
+
+    }
+
+
+    //--網路取資料
+    public Flowable<Passers> NiGetUser(String UserId)
+    {
+        return  HttpApiClient.getInstance().QrUser(UserId)
+                .subscribeOn(Schedulers.io())//--跑在線程背後--只讀一次
+                .map(new Function<String, Passers>() {
+                    @Override
+                    public Passers apply(@NonNull String s) throws Exception {
+                        //--取得對方資料
+                        User user = new Gson().fromJson(s,User.class);
+
+                        Passers passers = new Passers();
+                        passers.setId(null);
+                        passers.setUserObjectId(user.getObjectId());
+                        passers.setIsfollow(false);
+
+                        if (user.getNickname()==null){
+                            passers.setName(user.getUsername());
+                        }
+                        else{
+                            passers.setName(user.getNickname());
+                        }
+                        passers.setUserImage(user.getImage().getUrl());
+
+                        return passers;
+                    }
+                });
     }
 
 }

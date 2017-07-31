@@ -58,4 +58,15 @@ public interface API_Url {
             "X-LC-Key: "+MyLeanCloudApp.APP_KEY
     })
     Flowable<FcmKey> GetFcmKey(@Path("objectId")String objectId);
+
+
+
+    /**查詢使用者*/
+    @PUT("classes/_User/{objectId}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-LC-Id: "+ MyLeanCloudApp.APP_ID,
+            "X-LC-Key: "+MyLeanCloudApp.APP_KEY
+    })
+    Flowable<String> QrUser(@Path("objectId")String objectId);
 }

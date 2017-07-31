@@ -55,7 +55,7 @@ public class ConversFragment extends BaseFragment implements maView,SwipeRefresh
 
     @Override
     protected void findViewById(View view) {
-        recycler_view =(RecyclerView)view.findViewById(R.id.mSwipeRefreshLayout);
+        recycler_view =(RecyclerView)view.findViewById(R.id.recycler_view);
         recycler_view.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         mSwipeRefreshLayout =(SwipeRefreshLayout)view.findViewById(R.id.mSwipeRefreshLayout);
 
