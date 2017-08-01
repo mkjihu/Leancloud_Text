@@ -23,7 +23,7 @@ public class Passers {
     private String UserImage;
     private Boolean isfollow;
 
-    @Generated(hash = 439929296)
+    @Generated
     public Passers() {
     }
 
@@ -31,9 +31,8 @@ public class Passers {
         this.id = id;
     }
 
-    @Generated(hash = 1005239245)
-    public Passers(Long id, @NotNull String UserObjectId, @NotNull String name, byte[] UserImageBy, String UserImage,
-            Boolean isfollow) {
+    @Generated
+    public Passers(Long id, String UserObjectId, String name, byte[] UserImageBy, String UserImage, Boolean isfollow) {
         this.id = id;
         this.UserObjectId = UserObjectId;
         this.name = name;

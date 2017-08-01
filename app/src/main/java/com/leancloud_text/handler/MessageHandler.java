@@ -19,11 +19,11 @@ import com.google.gson.Gson;
 import com.leancloud_text.Model.User;
 import com.leancloud_text.MyLeanCloudApp;
 import com.leancloud_text.Network.HttpApiClient;
+import com.leancloud_text.SQL.Dialogue;
+import com.leancloud_text.SQL.DialogueDao;
 import com.leancloud_text.SQL.Passers;
 import com.leancloud_text.SQL.PassersDao;
 import com.leancloud_text.obj.LogU;
-
-import org.reactivestreams.Publisher;
 
 import java.util.Date;
 
@@ -33,8 +33,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
-
-import static com.avos.avoscloud.im.v2.AVIMReservedMessageType.*;
 
 /**
  * Created by kevinh on 2017/6/14.
@@ -147,6 +145,77 @@ public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
                 break;
         }
     }
+
+
+
+    //---儲存 對話暫存
+    public void SteDialogue(AVIMTypedMessage message, final AVIMConversation conversation)
+    {
+
+        Flowable.just(message)
+                .subscribeOn(Schedulers.io())//--跑在線程背後--只讀一次
+                .map(new Function<AVIMTypedMessage, Object>() {
+                    @Override
+                    public Object apply(@NonNull AVIMTypedMessage message) throws Exception {
+                        DialogueDao dialogueDao =  MyLeanCloudApp.getInstance().getDaoSession().getDialogueDao();
+
+                        //-判斷當前開起ConversationId 將影響該則訊息是否閱讀過
+
+                        boolean uismaee = false;
+
+                        Dialogue dialogue = new Dialogue(null
+                                , conversation.getConversationId()
+                                , conversation.getName()
+                                , message.getFrom()
+                                , ((AVIMTextMessage) message).getText()
+                                , conversation.getUpdatedAt()
+                                , uismaee);
+                        dialogueDao.insertOrReplace(dialogue);
+                        //--將訊息存入DB
+
+                        //-傳出EventBus 指令 //要求更新當前對話列表資料
+
+
+
+                        return null;
+                    }
+                })
+
+
+
+                .flatMap(new Function<String,  Flowable<Passers>>() {
+                    @Override
+                    public Flowable<Passers> apply(@NonNull String s) throws Exception {
+
+
+
+
+
+
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())//--結果在主線程中顯示
+                .unsubscribeOn(Schedulers.io())//允許取消訂閱
+                .subscribeWith(new DisposableSubscriber<Passers>() {
+                    @Override
+                    public void onNext(Passers passers) {
+                        LogU.i("完成", "完成");
+                        //--取得User資料
+
+
+
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        LogU.i("完成GG", e.getMessage());
+                    }
+                    @Override
+                    public void onComplete() {}
+                });
+
+    }
+
 
 
 
