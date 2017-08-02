@@ -49,6 +49,10 @@ public class MyLeanCloudApp  extends MultiDexApplication {
     public static MessageHandler messageHandler;
 
 
+    //判斷當前開起的對話ID  ConversationId
+    public String  Cu_ConversationId="";
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -100,6 +104,7 @@ public class MyLeanCloudApp  extends MultiDexApplication {
         if (daoSession==null) {
             initDaoSession();
         }
+
         return daoSession;
     }
 
@@ -114,6 +119,7 @@ public class MyLeanCloudApp  extends MultiDexApplication {
         DaoMaster daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
 
+        //daoSession.getDatabase().close();关闭资料库连接
     }
 
 

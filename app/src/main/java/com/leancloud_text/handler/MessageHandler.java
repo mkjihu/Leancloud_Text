@@ -23,6 +23,8 @@ import com.leancloud_text.SQL.Dialogue;
 import com.leancloud_text.SQL.DialogueDao;
 import com.leancloud_text.SQL.Passers;
 import com.leancloud_text.SQL.PassersDao;
+import com.leancloud_text.SQL.TalkList;
+import com.leancloud_text.SQL.TalkListDao;
 import com.leancloud_text.obj.LogU;
 
 import java.util.Date;
@@ -154,15 +156,18 @@ public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
 
         Flowable.just(message)
                 .subscribeOn(Schedulers.io())//--跑在線程背後--只讀一次
-                .map(new Function<AVIMTypedMessage, Object>() {
+                .map(new Function<AVIMTypedMessage, String>() {
                     @Override
-                    public Object apply(@NonNull AVIMTypedMessage message) throws Exception {
+                    public String apply(@NonNull AVIMTypedMessage message) throws Exception {
+
                         DialogueDao dialogueDao =  MyLeanCloudApp.getInstance().getDaoSession().getDialogueDao();
 
                         //-判斷當前開起ConversationId 將影響該則訊息是否閱讀過
-
                         boolean uismaee = false;
-
+                        if (MyLeanCloudApp.getInstance().Cu_ConversationId.equals(conversation.getConversationId()))  {
+                            uismaee = true;
+                        }
+                        //--將訊息存入DB
                         Dialogue dialogue = new Dialogue(null
                                 , conversation.getConversationId()
                                 , conversation.getName()
@@ -171,34 +176,26 @@ public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
                                 , conversation.getUpdatedAt()
                                 , uismaee);
                         dialogueDao.insertOrReplace(dialogue);
-                        //--將訊息存入DB
+
+                        //-更新對話列表DP資料
+                        TalkListDao talkListDao = MyLeanCloudApp.getInstance().getDaoSession().getTalkListDao();
+                        TalkList talkList = talkListDao.queryBuilder().where()
+
+
+
+
+
 
                         //-傳出EventBus 指令 //要求更新當前對話列表資料
-
-
 
                         return null;
                     }
                 })
-
-
-
-                .flatMap(new Function<String,  Flowable<Passers>>() {
-                    @Override
-                    public Flowable<Passers> apply(@NonNull String s) throws Exception {
-
-
-
-
-
-
-                    }
-                })
                 .observeOn(AndroidSchedulers.mainThread())//--結果在主線程中顯示
                 .unsubscribeOn(Schedulers.io())//允許取消訂閱
-                .subscribeWith(new DisposableSubscriber<Passers>() {
+                .subscribeWith(new DisposableSubscriber<String>() {
                     @Override
-                    public void onNext(Passers passers) {
+                    public void onNext(String passers) {
                         LogU.i("完成", "完成");
                         //--取得User資料
 
